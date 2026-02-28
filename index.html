@@ -25,6 +25,10 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="topbar-left">
+                <div class="figma-logo-container" style="padding-right: 12px; display: flex; align-items: center;">
+                    <img id="mainFigmaLogo" src="assets/logo/figma.png" alt="Figma Logo"
+                        style="height: 18px; object-fit: contain;">
+                </div>
                 <div class="icon-btn tool-active"><span class="material-symbols-outlined">near_me</span></div>
                 <div class="icon-btn"><span class="material-symbols-outlined">tag</span></div>
                 <div class="icon-btn"><span class="material-symbols-outlined">text_fields</span></div>
@@ -53,7 +57,15 @@
         </header>
 
         <!-- MAIN WORKSPACE -->
-        <main class="workspace">
+        <main class="workspace" id="workspace">
+
+            <!-- TOGGLE BUTTONS (Visible only on smaller screens) -->
+            <button id="toggleLeftSidebar" class="toggle-sidebar-btn left-toggle">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            <button id="toggleRightSidebar" class="toggle-sidebar-btn right-toggle">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
 
             <!-- LEFT SIDEBAR (LAYERS) -->
             <aside class="sidebar left-sidebar">
@@ -209,7 +221,8 @@
                     <div class="panel-msg">
                         <p style="color: #888; font-size: 11px; padding: 10px 0; line-height: 1.4;">
                             ℹ️ Survolez la zone de travail pour afficher le design haute fidélité. Cliquez sur «
-                            Présenter » (en haut à droite) pour voir le portfolio interactif complet.
+                            Present » (le logo en haut à droite en forme de triangle) pour voir le portfolio interactif
+                            complet.
                         </p>
                     </div>
 
