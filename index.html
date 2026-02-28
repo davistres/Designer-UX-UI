@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David D'AMORE - UX/UI Designer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="portfolio.css">
+
+    <!-- Using Inter font to match Figma's aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons (Material Symbols Outlined for a clean look) -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+
+    <div class="figma-app">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="icon-btn tool-active"><span class="material-symbols-outlined">near_me</span></div>
+                <div class="icon-btn"><span class="material-symbols-outlined">tag</span></div>
+                <div class="icon-btn"><span class="material-symbols-outlined">text_fields</span></div>
+                <div class="icon-btn"><span class="material-symbols-outlined">back_hand</span></div>
+                <div class="icon-btn"><span class="material-symbols-outlined">chat_bubble</span></div>
+            </div>
+
+            <div class="topbar-center">
+                <span class="file-name">Drafts / <strong>David_DAMORE_Portfolio.fig</strong></span>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+
+            <div class="topbar-right">
+                <div class="avatars">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="User 1" class="avatar">
+                    <img src="https://i.pravatar.cc/150?img=32" alt="User 2" class="avatar">
+                    <div class="avatar more-users">+3</div>
+                </div>
+                <button class="icon-btn share-btn">Share</button>
+                <div class="zoom-level">100% <span class="material-symbols-outlined expand-icon">expand_more</span>
+                </div>
+                <button id="presentBtn" class="present-btn">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="workspace">
+
+            <!-- LEFT SIDEBAR (LAYERS) -->
+            <aside class="sidebar left-sidebar">
+                <div class="sidebar-tabs">
+                    <div class="tab active">File</div>
+                    <div class="tab">Assets</div>
+                </div>
+                <div class="sidebar-content">
+                    <div class="layer-item folder open">
+                        <span class="material-symbols-outlined layer-icon">keyboard_arrow_down</span>
+                        <span class="material-symbols-outlined layer-icon">tag</span>
+                        Desktop - Portfolio
+                    </div>
+                    <div class="layer-item indent">
+                        <span class="material-symbols-outlined layer-icon">grid_view</span>
+                        Navbar
+                    </div>
+                    <div class="layer-item indent">
+                        <span class="material-symbols-outlined layer-icon">grid_view</span>
+                        Hero Section
+                    </div>
+                    <div class="layer-item indent">
+                        <span class="material-symbols-outlined layer-icon">grid_view</span>
+                        Selected Projects
+                    </div>
+                    <div class="layer-item indent">
+                        <span class="material-symbols-outlined layer-icon">grid_view</span>
+                        About Me
+                    </div>
+                    <div class="layer-item indent">
+                        <span class="material-symbols-outlined layer-icon">grid_view</span>
+                        Footer / Contact
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CANVAS -->
+            <section class="canvas" id="canvas">
+                <div class="artboard-wrapper">
+                    <div class="artboard-label">Desktop - Portfolio</div>
+
+                    <!-- THE ACTUAL PORTFOLIO ARTBOARD -->
+                    <div class="artboard" id="portfolio-artboard" data-state="wireframe">
+
+                        <!-- Header -->
+                        <header class="portfolio-header">
+                            <div class="logo">[D] DAMORE</div>
+                            <nav class="portfolio-nav">
+                                <span>Work</span>
+                                <span>About</span>
+                                <span>Contact</span>
+                            </nav>
+                        </header>
+
+                        <!-- Hero -->
+                        <section class="portfolio-hero">
+                            <div class="hero-content">
+                                <h1>UX/UI Designer.</h1>
+                                <h2>Creating digital experiences that matter.</h2>
+                                <p class="bio">I'm David D'AMORE, a UX/UI designer focused on crafting innovative,
+                                    clean, and impactful interfaces with a user-centric approach.</p>
+                                <button class="btn-primary">View Projects</button>
+                            </div>
+                            <div class="hero-image-placeholder">
+                                <span class="material-symbols-outlined img-icon">image</span>
+                            </div>
+                        </section>
+
+                        <!-- Projects Grid -->
+                        <section class="portfolio-projects">
+                            <div class="section-title">
+                                <h2>Featured Work</h2>
+                            </div>
+                            <div class="projects-grid">
+                                <!-- Project 1 -->
+                                <article class="project-card">
+                                    <div class="project-image-placeholder">
+                                        <span class="material-symbols-outlined img-icon">image</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <h3>Finance App Redesign</h3>
+                                        <p>UX Research • UI Design • Prototyping</p>
+                                    </div>
+                                </article>
+                                <!-- Project 2 -->
+                                <article class="project-card">
+                                    <div class="project-image-placeholder">
+                                        <span class="material-symbols-outlined img-icon">image</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <h3>E-Commerce Platform</h3>
+                                        <p>Design System • E-commerce • Mobile</p>
+                                    </div>
+                                </article>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT SIDEBAR (PROPERTIES) -->
+            <aside class="sidebar right-sidebar">
+                <div class="sidebar-tabs">
+                    <div class="tab active">Design</div>
+                    <div class="tab">Prototype</div>
+                    <div class="tab">Inspect</div>
+                </div>
+                <div class="sidebar-content properties-panel">
+
+                    <div class="panel-section">
+                        <div class="section-header">Align</div>
+                        <div class="align-controls">
+                            <span class="material-symbols-outlined">align_horizontal_left</span>
+                            <span class="material-symbols-outlined">align_horizontal_center</span>
+                            <span class="material-symbols-outlined">align_horizontal_right</span>
+                            <span class="material-symbols-outlined">align_vertical_top</span>
+                            <span class="material-symbols-outlined">align_vertical_center</span>
+                            <span class="material-symbols-outlined">align_vertical_bottom</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">Layout</div>
+                        <div class="prop-row">
+                            <div class="prop-item"><span>X</span> <input type="text" value="0"></div>
+                            <div class="prop-item"><span>Y</span> <input type="text" value="0"></div>
+                        </div>
+                        <div class="prop-row">
+                            <div class="prop-item"><span>W</span> <input type="text" value="1440"></div>
+                            <div class="prop-item"><span>H</span> <input type="text" value="3200"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">Fill</div>
+                        <div class="color-row">
+                            <div class="color-swatch" style="background: #E5E5E5; border: 1px solid #555;"></div>
+                            <span class="color-hex">E5E5E5</span>
+                            <span class="color-alpha">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">Stroke</div>
+                        <div class="color-row">
+                            <div class="color-swatch" style="background: #CCCCCC; border: 1px solid #555;"></div>
+                            <span class="color-hex">CCCCCC</span>
+                            <span class="color-alpha">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-msg">
+                        <p style="color: #888; font-size: 11px; padding: 10px 0; line-height: 1.4;">
+                            ℹ️ Survolez la zone de travail pour afficher le design haute fidélité. Cliquez sur «
+                            Présenter » (en haut à droite) pour voir le portfolio interactif complet.
+                        </p>
+                    </div>
+
+                </div>
+            </aside>
+        </main>
+
+        <!-- EXIT PRESENTATION BUTTON (Hidden by default) -->
+        <button id="exitPresentBtn" class="exit-present-btn hidden">
+            <span class="material-symbols-outlined">close</span> Exit Presentation
+        </button>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

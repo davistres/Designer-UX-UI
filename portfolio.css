@@ -1,0 +1,269 @@
+/* =========================================
+   PORTFOLIO CONTENT (INSIDE ARTBOARD)
+   ========================================= */
+.artboard {
+    --wireframe-color: #999;
+    --wireframe-bg: #F5F5F5;
+    --wireframe-border: 2px dashed #CCC;
+    --wireframe-font: 'Courier New', Courier, monospace;
+
+    --mockup-bg: #FFFFFF;
+    --mockup-text: #111827;
+    --mockup-text-light: #6B7280;
+    --mockup-primary: #4F46E5;
+    /* Indigo */
+    --mockup-font: 'Inter', sans-serif;
+
+    transition: all 0.4s ease;
+}
+
+/* ---------------------------------
+   GLOBAL STATES 
+   --------------------------------- */
+.artboard[data-state="wireframe"] {
+    background-color: var(--wireframe-bg);
+    color: var(--wireframe-color);
+    font-family: var(--wireframe-font);
+}
+
+.artboard[data-state="wireframe"] h1,
+.artboard[data-state="wireframe"] h2,
+.artboard[data-state="wireframe"] h3,
+.artboard[data-state="wireframe"] p,
+.artboard[data-state="wireframe"] span,
+.artboard[data-state="wireframe"] .logo {
+    color: var(--wireframe-color);
+    font-family: var(--wireframe-font);
+    font-weight: normal;
+}
+
+.artboard[data-state="mockup"] {
+    background-color: var(--mockup-bg);
+    color: var(--mockup-text);
+    font-family: var(--mockup-font);
+}
+
+/* Smooth Transitions for everything */
+.artboard *,
+.artboard *::before,
+.artboard *::after {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------
+   HEADER
+   --------------------------------- */
+.portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 64px;
+}
+
+.artboard[data-state="wireframe"] .portfolio-header {
+    border-bottom: var(--wireframe-border);
+}
+
+.artboard[data-state="mockup"] .logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--mockup-text);
+    letter-spacing: -1px;
+}
+
+.portfolio-nav {
+    display: flex;
+    gap: 32px;
+}
+
+.artboard[data-state="mockup"] .portfolio-nav span {
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    color: var(--mockup-text);
+}
+
+.artboard[data-state="mockup"] .portfolio-nav span:hover {
+    color: var(--mockup-primary);
+}
+
+/* ---------------------------------
+   HERO SECTION
+   --------------------------------- */
+.portfolio-hero {
+    display: flex;
+    align-items: center;
+    padding: 80px 64px;
+    gap: 64px;
+    min-height: 600px;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.artboard[data-state="mockup"] .hero-content h1 {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #4F46E5 0%, #EC4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -2px;
+}
+
+.artboard[data-state="mockup"] .hero-content h2 {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--mockup-text);
+    margin-bottom: 24px;
+}
+
+.artboard[data-state="mockup"] .bio {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--mockup-text-light);
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+.btn-primary {
+    padding: 16px 32px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.artboard[data-state="wireframe"] .btn-primary {
+    background: transparent;
+    border: var(--wireframe-border);
+    color: var(--wireframe-color);
+    font-family: var(--wireframe-font);
+}
+
+.artboard[data-state="mockup"] .btn-primary {
+    background-color: var(--mockup-text);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: var(--mockup-font);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.artboard[data-state="mockup"] .btn-primary:hover {
+    background-color: var(--mockup-primary);
+    transform: translateY(-2px);
+}
+
+/* Image Placeholders vs Real Images */
+.hero-image-placeholder {
+    width: 400px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.artboard[data-state="wireframe"] .hero-image-placeholder {
+    background-color: #E2E2E2;
+    border: var(--wireframe-border);
+}
+
+.artboard[data-state="wireframe"] .img-icon {
+    font-size: 48px;
+    color: #CCC;
+}
+
+.artboard[data-state="mockup"] .hero-image-placeholder {
+    background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800');
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.artboard[data-state="mockup"] .img-icon {
+    display: none;
+}
+
+/* ---------------------------------
+   PROJECTS SECTION
+   --------------------------------- */
+.portfolio-projects {
+    padding: 80px 64px;
+    background-color: #FAFAFA;
+}
+
+.artboard[data-state="wireframe"] .portfolio-projects {
+    background-color: var(--wireframe-bg);
+    border-top: var(--wireframe-border);
+}
+
+.section-title {
+    margin-bottom: 48px;
+}
+
+.artboard[data-state="mockup"] .section-title h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    cursor: pointer;
+}
+
+.project-image-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.artboard[data-state="wireframe"] .project-image-placeholder {
+    background-color: #E2E2E2;
+    border: var(--wireframe-border);
+}
+
+.artboard[data-state="mockup"] .project-image-placeholder {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    background-size: cover;
+    background-position: center;
+}
+
+.artboard[data-state="mockup"] .project-card:nth-child(1) .project-image-placeholder {
+    background-image: url('https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&q=80&w=800');
+}
+
+.artboard[data-state="mockup"] .project-card:nth-child(2) .project-image-placeholder {
+    background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800');
+}
+
+.artboard[data-state="mockup"] .project-card:hover .project-image-placeholder {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.artboard[data-state="mockup"] .project-info h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.artboard[data-state="mockup"] .project-info p {
+    font-size: 16px;
+    color: var(--mockup-text-light);
+}
