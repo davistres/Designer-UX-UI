@@ -783,3 +783,182 @@ body.mode-present .artboard {
 .high-five-overlay.slap .hand.right-hand {
     animation: highFiveSlapRight 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
+/* =========================================
+   HASHTAG BUBBLES
+   ========================================= */
+.hashtag-bubble {
+    position: absolute;
+    pointer-events: none;
+    /* Ignore clicks */
+    background-color: var(--ui-bg);
+    color: var(--ui-accent);
+    border: 1px solid var(--ui-border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    white-space: nowrap;
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+/* The state when the bubble is fully visible */
+.hashtag-bubble.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* The state when the bubble pops (scales up slightly then vanishes) */
+.hashtag-bubble.pop {
+    opacity: 0;
+    transform: scale(1.2);
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+/* =========================================
+   CONTACT FORM MODAL
+   ========================================= */
+.contact-modal {
+    position: absolute;
+    top: 52px;
+    /* Just below topbar */
+    left: 180px;
+    /* Align roughly under the chat icon based on standard layout */
+    width: 320px;
+    background-color: var(--ui-bg);
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 500;
+    font-family: var(--font-ui);
+    color: var(--ui-text);
+    overflow: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform-origin: top left;
+}
+
+.contact-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px) scale(0.95);
+}
+
+.contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--ui-border);
+}
+
+.contact-header h3 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--ui-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.close-btn:hover {
+    background-color: var(--ui-hover);
+    color: var(--ui-text);
+}
+
+.close-btn .material-symbols-outlined {
+    font-size: 16px;
+}
+
+#contactForm {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ui-text-muted);
+}
+
+.form-group input,
+.form-group textarea {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: var(--ui-text);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--ui-accent);
+}
+
+.submit-btn {
+    background-color: var(--ui-accent);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #0b8ce1;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.form-status-msg {
+    font-size: 12px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.form-status-msg.success {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.form-status-msg.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}

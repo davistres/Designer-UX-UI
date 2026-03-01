@@ -31,14 +31,15 @@
                     <img id="mainFigmaLogo" src="assets/logo/figma.png" alt="Figma Logo"
                         style="height: 18px; object-fit: contain; cursor: pointer;">
                 </div>
-                <div class="icon-btn tool-active"><span class="material-symbols-outlined">near_me</span></div>
-                <div class="icon-btn"><span class="material-symbols-outlined">tag</span></div>
+                <div class="icon-btn tool-active" id="cursorBtn"><span class="material-symbols-outlined">near_me</span>
+                </div>
+                <div class="icon-btn" id="tagBtn"><span class="material-symbols-outlined">tag</span></div>
                 <div class="icon-btn"><span class="material-symbols-outlined">text_fields</span></div>
                 <div class="icon-btn tooltip-container" id="highFiveBtn" data-tooltip="High five?"
                     style="position: relative;">
                     <span class="material-symbols-outlined">back_hand</span>
                 </div>
-                <div class="icon-btn"><span class="material-symbols-outlined">chat_bubble</span></div>
+                <div class="icon-btn" id="contactBtn"><span class="material-symbols-outlined">chat_bubble</span></div>
             </div>
 
             <div class="topbar-center">
@@ -260,6 +261,34 @@
     <div id="highFiveAnimation" class="high-five-overlay hidden">
         <div class="hand left-hand">👋</div>
         <div class="hand right-hand" style="transform: scaleX(-1);">👋</div>
+    </div>
+
+    <!-- CONTACT FORM MODAL -->
+    <div id="contactModal" class="contact-modal hidden">
+        <div class="contact-header">
+            <h3>Send me a message</h3>
+            <button id="closeContactBtn" class="close-btn"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="contactForm" action="https://formsubmit.co/csfwebdesign@gmail.com" method="POST">
+            <!-- FormSubmit config -->
+            <input type="hidden" name="_subject" value="New message from Portfolio Form!">
+            <input type="hidden" name="_next" value="#">
+            <input type="hidden" name="_captcha" value="false">
+
+            <div class="form-group">
+                <label for="senderEmail">Your Email</label>
+                <input type="email" id="senderEmail" name="email" placeholder="hello@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="senderMessage">Message</label>
+                <textarea id="senderMessage" name="message" rows="4" placeholder="How can I help you?"
+                    required></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitContactBtn">
+                <span class="material-symbols-outlined">send</span> Send
+            </button>
+            <div id="formStatusMsg" class="form-status-msg hidden"></div>
+        </form>
     </div>
 
     <!-- Canvas Confetti for ultra-lightweight particles -->
