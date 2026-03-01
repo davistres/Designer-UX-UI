@@ -528,6 +528,17 @@ body.mode-present .artboard {
     outline: none;
 }
 
+/* Hide number spinners for property inputs */
+.prop-item input[type="number"]::-webkit-outer-spin-button,
+.prop-item input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.prop-item input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .color-row {
     display: flex;
     align-items: center;
@@ -961,4 +972,60 @@ body.mode-present .artboard {
     background-color: rgba(239, 68, 68, 0.2);
     color: #EF4444;
     border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================
+   TEXT TOOL & SELECTION
+   ========================================= */
+.color-swatch-input {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #555;
+    border-radius: 2px;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.color-swatch-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-swatch-input::-webkit-color-swatch {
+    border: none;
+}
+
+.text-element {
+    position: absolute;
+    min-width: 10px;
+    min-height: 1.2em;
+    font-family: var(--font-ui);
+    color: #333;
+    /* Default dark text on light artboard */
+    outline: none;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-break: break-word;
+    cursor: text;
+    border: 1px solid transparent;
+    transition: opacity 2s ease;
+    /* For the 1-minute fadeout */
+    z-index: 100;
+}
+
+/* Outline shown on selected state */
+.text-element.selected {
+    box-shadow: 0 0 0 1px var(--ui-accent);
+}
+
+/* Outline shown when bounding box is drawn */
+.selection-marquee {
+    position: absolute;
+    border: 1px solid var(--ui-accent);
+    background-color: rgba(24, 160, 251, 0.1);
+    pointer-events: none;
+    z-index: 10000;
 }

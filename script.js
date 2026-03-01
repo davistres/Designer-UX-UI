@@ -82,6 +82,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Wheel and Input logic for zoomLevelText
+        if (zoomLevelText) {
+            zoomLevelText.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const zoomFactor = 0.05;
+                let newZoom = currentZoom;
+                if (e.deltaY > 0) {
+                    newZoom -= zoomFactor;
+                } else {
+                    newZoom += zoomFactor;
+                }
+                newZoom = Math.max(0.1, Math.min(newZoom, 4));
+                applyZoom(newZoom);
+            }, { passive: false });
+
+            // Allow typing a custom zoom value
+            zoomLevelText.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                zoomLevelText.contentEditable = 'true';
+                zoomLevelText.focus();
+                document.execCommand('selectAll', false, null);
+            });
+
+            zoomLevelText.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    zoomLevelText.blur();
+                }
+            });
+
+            zoomLevelText.addEventListener('blur', () => {
+                zoomLevelText.contentEditable = 'false';
+                let val = parseFloat(zoomLevelText.innerText.replace('%', ''));
+                if (!isNaN(val)) {
+                    val = Math.max(10, Math.min(400, val));
+                    applyZoom(val / 100);
+                } else {
+                    // Reset to old value visually
+                    applyZoom(currentZoom);
+                }
+            });
+        }
+
         if (canvasSection) {
             // passive: false is required to preventDefault on wheel
             canvasSection.addEventListener('wheel', (e) => {
@@ -261,25 +306,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Tag Tool & Hashtag Logic ---
-    let tagModeActive = false;
+    // --- Tool State Management ---
+    let currentTool = 'cursor'; // 'cursor', 'tag', 'text'
+    const textBtn = document.getElementById('textBtn');
 
-    if (cursorBtn && tagBtn) {
-        cursorBtn.addEventListener('click', () => {
-            tagModeActive = false;
-            cursorBtn.classList.add('tool-active');
-            tagBtn.classList.remove('tool-active');
-            workspace.style.cursor = 'default';
-            if (artboard) artboard.style.cursor = 'default';
-        });
+    function setTool(tool) {
+        currentTool = tool;
+        if (cursorBtn) cursorBtn.classList.remove('tool-active');
+        if (tagBtn) tagBtn.classList.remove('tool-active');
+        if (textBtn) textBtn.classList.remove('tool-active');
 
-        tagBtn.addEventListener('click', () => {
-            tagModeActive = true;
-            tagBtn.classList.add('tool-active');
-            cursorBtn.classList.remove('tool-active');
+        workspace.style.cursor = 'default';
+        if (artboard) artboard.style.cursor = 'default';
+
+        if (tool === 'cursor') {
+            if (cursorBtn) cursorBtn.classList.add('tool-active');
+        } else if (tool === 'tag') {
+            if (tagBtn) tagBtn.classList.add('tool-active');
             workspace.style.cursor = 'crosshair';
             if (artboard) artboard.style.cursor = 'crosshair';
-        });
+            clearSelection();
+        } else if (tool === 'text') {
+            if (textBtn) textBtn.classList.add('tool-active');
+            workspace.style.cursor = 'text';
+            if (artboard) artboard.style.cursor = 'text';
+            clearSelection();
+        }
+    }
+
+    if (cursorBtn && tagBtn) {
+        cursorBtn.addEventListener('click', () => setTool('cursor'));
+        tagBtn.addEventListener('click', () => setTool('tag'));
+        if (textBtn) textBtn.addEventListener('click', () => setTool('text'));
     }
 
     const uxHashtags = [
@@ -387,10 +445,515 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attach to workspace click
     workspace.addEventListener('click', (e) => {
-        if (tagModeActive && !document.body.classList.contains('mode-present')) {
+        if (currentTool === 'tag' && !document.body.classList.contains('mode-present')) {
             spawnHashtags(e);
         }
     });
+
+    // --- Text Tool & Selection Mechanisms ---
+    let textElements = [];
+    let selectedElements = [];
+
+    // Artboard canvas interactions
+    let isDrawing = false;
+    let startX = 0, startY = 0;
+    let currentTempBox = null;
+
+    // Helper to clear selection
+    function clearSelection() {
+        selectedElements.forEach(el => el.classList.remove('selected'));
+        selectedElements = [];
+        updatePropertiesPanel();
+    }
+
+    function addToSelection(el) {
+        if (!selectedElements.includes(el)) {
+            selectedElements.push(el);
+            el.classList.add('selected');
+        }
+        updatePropertiesPanel();
+    }
+
+    // Artboard coordinates helper (accounts for scale/zoom and bounding rect)
+    function getArtboardLocalCoords(e) {
+        if (!artboard) return { x: 0, y: 0 };
+        const rect = artboard.getBoundingClientRect();
+        // currentZoom is from the zoom logic higher up
+        const scale = window.currentZoom || 1;
+        return {
+            x: (e.clientX - rect.left) / scale,
+            y: (e.clientY - rect.top) / scale
+        };
+    }
+
+    if (artboard) {
+        artboard.addEventListener('mousedown', (e) => {
+            if (document.body.classList.contains('mode-present')) return;
+
+            // If we are clicking on an existing text element, handle selection or editing
+            if (e.target.classList.contains('text-element') && currentTool === 'cursor') {
+                if (e.shiftKey) {
+                    if (selectedElements.includes(e.target)) {
+                        selectedElements = selectedElements.filter(el => el !== e.target);
+                        e.target.classList.remove('selected');
+                        updatePropertiesPanel();
+                    } else {
+                        addToSelection(e.target);
+                    }
+                } else {
+                    if (!selectedElements.includes(e.target)) {
+                        clearSelection();
+                        addToSelection(e.target);
+                    }
+                }
+                return; // Let native drag or double-click to edit happen later
+            }
+
+            if (currentTool === 'cursor') {
+                // Clicked empty space with cursor -> clear selection & start marquee
+                clearSelection();
+                isDrawing = true;
+                const coords = getArtboardLocalCoords(e);
+                startX = coords.x;
+                startY = coords.y;
+
+                if (!currentTempBox) {
+                    currentTempBox = document.createElement('div');
+                    currentTempBox.className = 'selection-marquee';
+                    artboard.appendChild(currentTempBox);
+                }
+                currentTempBox.style.left = `${startX}px`;
+                currentTempBox.style.top = `${startY}px`;
+                currentTempBox.style.width = `0px`;
+                currentTempBox.style.height = `0px`;
+                currentTempBox.style.display = 'block';
+            }
+            else if (currentTool === 'text') {
+                isDrawing = true;
+                const coords = getArtboardLocalCoords(e);
+                startX = coords.x;
+                startY = coords.y;
+
+                if (!currentTempBox) {
+                    // Visual placeholder for the text box being drawn
+                    currentTempBox = document.createElement('div');
+                    currentTempBox.className = 'selection-marquee';
+                    artboard.appendChild(currentTempBox);
+                }
+                currentTempBox.style.left = `${startX}px`;
+                currentTempBox.style.top = `${startY}px`;
+                currentTempBox.style.width = `0px`;
+                currentTempBox.style.height = `0px`;
+                currentTempBox.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDrawing || !currentTempBox || document.body.classList.contains('mode-present')) return;
+
+            const coords = getArtboardLocalCoords(e);
+            const currentX = coords.x;
+            const currentY = coords.y;
+
+            const x = Math.min(startX, currentX);
+            const y = Math.min(startY, currentY);
+            const w = Math.abs(currentX - startX);
+            const h = Math.abs(currentY - startY);
+
+            currentTempBox.style.left = `${x}px`;
+            currentTempBox.style.top = `${y}px`;
+            currentTempBox.style.width = `${w}px`;
+            currentTempBox.style.height = `${h}px`;
+
+            if (currentTool === 'cursor') {
+                // Marquee selection logic
+                const boxRect = { left: x, top: y, right: x + w, bottom: y + h };
+
+                // Unselect all temporarily, then re-select intersecting
+                selectedElements.forEach(el => el.classList.remove('selected'));
+                let newSelection = [];
+
+                textElements.forEach(textEl => {
+                    const l = parseFloat(textEl.style.left);
+                    const t = parseFloat(textEl.style.top);
+                    const r = l + textEl.offsetWidth;
+                    const b = t + textEl.offsetHeight;
+
+                    // Check intersection
+                    if (boxRect.left < r && boxRect.right > l && boxRect.top < b && boxRect.bottom > t) {
+                        newSelection.push(textEl);
+                        textEl.classList.add('selected');
+                    }
+                });
+                selectedElements = newSelection;
+                updatePropertiesPanel();
+            }
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (!isDrawing || document.body.classList.contains('mode-present')) return;
+            isDrawing = false;
+
+            if (currentTempBox) {
+                currentTempBox.style.display = 'none';
+            }
+
+            if (currentTool === 'text') {
+                const coords = getArtboardLocalCoords(e);
+                const currentX = coords.x;
+                const currentY = coords.y;
+
+                const x = Math.min(startX, currentX);
+                const y = Math.min(startY, currentY);
+                const w = Math.abs(currentX - startX);
+                const h = Math.abs(currentY - startY);
+
+                createNewTextElement(x, y, w, h);
+                // Return to cursor automatically after creating text
+                setTool('cursor');
+            }
+        });
+    }
+
+    function createNewTextElement(x, y, w, h) {
+        const textEl = document.createElement('div');
+        textEl.className = 'text-element';
+        textEl.contentEditable = "true";
+
+        textEl.style.left = `${x}px`;
+        textEl.style.top = `${y}px`;
+
+        // If drawn box is tiny (just a click), it's auto sizing point text
+        if (w < 10 && h < 10) {
+            textEl.style.width = 'auto';
+            textEl.style.height = 'auto';
+            textEl.dataset.type = 'point';
+        } else {
+            // Drawn specifically
+            textEl.style.width = `${Math.max(w, 50)}px`;
+            textEl.style.height = `${Math.max(h, 20)}px`;
+            textEl.dataset.type = 'box';
+        }
+
+        const propFontSize = document.getElementById('propFontSize');
+        if (propFontSize) textEl.style.fontSize = `${propFontSize.value}px`;
+
+        // Apply default colors
+        const defaultFillHex = document.getElementById('fillColorHex') ? '#' + document.getElementById('fillColorHex').textContent : '#333333';
+        const defaultFillAlpha = document.getElementById('fillColorAlpha') ? document.getElementById('fillColorAlpha').value : '100';
+        const defaultStrokeHex = document.getElementById('strokeColorHex') ? '#' + document.getElementById('strokeColorHex').textContent : 'transparent';
+        const defaultStrokeAlpha = document.getElementById('strokeColorAlpha') ? document.getElementById('strokeColorAlpha').value : '100';
+        const defaultStrokeWidth = document.getElementById('propStrokeSize') ? document.getElementById('propStrokeSize').value : 0;
+
+        textEl.style.color = getHexAlphaColor(defaultFillHex, defaultFillAlpha);
+        textEl.style.webkitTextStrokeColor = getHexAlphaColor(defaultStrokeHex, defaultStrokeAlpha);
+        textEl.style.webkitTextStrokeWidth = `${defaultStrokeWidth}px`;
+
+        artboard.appendChild(textEl);
+        textElements.push(textEl);
+
+        // Immediate focus for typing
+        setTimeout(() => {
+            textEl.focus();
+            clearSelection();
+            addToSelection(textEl);
+        }, 10);
+
+        // Manage fading and removal
+        textEl.addEventListener('blur', () => {
+            if (textEl.textContent.trim() === '') {
+                // Remove if empty
+                textEl.remove();
+                textElements = textElements.filter(el => el !== textEl);
+                selectedElements = selectedElements.filter(el => el !== textEl);
+                updatePropertiesPanel();
+            } else {
+                // 1 minute fadeout
+                setTimeout(() => {
+                    textEl.style.opacity = '0';
+                    setTimeout(() => {
+                        textEl.remove();
+                        textElements = textElements.filter(el => el !== textEl);
+                        selectedElements = selectedElements.filter(el => el !== textEl);
+                        updatePropertiesPanel();
+                    }, 2000); // Wait for transition CSS
+                }, 60000);
+            }
+        });
+
+        // When clicked again (while we are in cursor mode), we might edit it
+        textEl.addEventListener('dblclick', (e) => {
+            if (currentTool === 'cursor') {
+                e.stopPropagation();
+                textEl.focus();
+                // Select all text natively
+                document.execCommand('selectAll', false, null);
+            }
+        });
+    }
+
+    // --- Properties Panel Synchronization & Alignment ---
+    const propX = document.getElementById('propX');
+    const propY = document.getElementById('propY');
+    const propW = document.getElementById('propW');
+    const propH = document.getElementById('propH');
+    const propFontSize = document.getElementById('propFontSize');
+    const propStrokeSize = document.getElementById('propStrokeSize');
+
+    const fillColorInput = document.getElementById('fillColorInput');
+    const fillColorHex = document.getElementById('fillColorHex');
+    const fillColorAlpha = document.getElementById('fillColorAlpha');
+
+    const strokeColorInput = document.getElementById('strokeColorInput');
+    const strokeColorHex = document.getElementById('strokeColorHex');
+    const strokeColorAlpha = document.getElementById('strokeColorAlpha');
+
+    function getHexAlphaColor(hexStr, alphaPercent) {
+        if (!hexStr || hexStr === 'transparent' || hexStr === '#TRANSPARENT') return 'transparent';
+        let alpha = parseInt(alphaPercent);
+        if (isNaN(alpha)) alpha = 100;
+        let alphaHex = Math.round((alpha / 100) * 255).toString(16).padStart(2, '0');
+        return `${hexStr}${alphaHex}`;
+    }
+
+    const colToHexAlpha = (col) => {
+        if (!col || col === 'transparent' || col === 'rgba(0, 0, 0, 0)') return { hex: '#TRANSPARENT', alpha: 100 };
+
+        let parsedCol = col;
+        if (!parsedCol.startsWith('rgb')) {
+            const temp = document.createElement('div');
+            temp.style.color = col;
+            document.body.appendChild(temp);
+            parsedCol = window.getComputedStyle(temp).color;
+            temp.remove();
+        }
+
+        if (parsedCol.startsWith('rgba')) {
+            const a = parsedCol.split("(")[1].split(")")[0].split(",");
+            const r = parseInt(a[0].trim()).toString(16).padStart(2, '0');
+            const g = parseInt(a[1].trim()).toString(16).padStart(2, '0');
+            const b = parseInt(a[2].trim()).toString(16).padStart(2, '0');
+            const alpha = Math.round(parseFloat(a[3].trim()) * 100);
+            return { hex: `#${r}${g}${b}`.toUpperCase(), alpha: alpha };
+        } else if (parsedCol.startsWith('rgb')) {
+            const a = parsedCol.split("(")[1].split(")")[0].split(",");
+            const r = parseInt(a[0].trim()).toString(16).padStart(2, '0');
+            const g = parseInt(a[1].trim()).toString(16).padStart(2, '0');
+            const b = parseInt(a[2].trim()).toString(16).padStart(2, '0');
+            return { hex: `#${r}${g}${b}`.toUpperCase(), alpha: 100 };
+        }
+        return { hex: '#000000', alpha: 100 };
+    };
+
+    function updatePropertiesPanel() {
+        if (selectedElements.length === 0) {
+            return;
+        }
+
+        if (selectedElements.length === 1) {
+            const el = selectedElements[0];
+            if (propX) propX.value = Math.round(parseFloat(el.style.left)) || 0;
+            if (propY) propY.value = Math.round(parseFloat(el.style.top)) || 0;
+            if (propW) propW.value = Math.round(el.offsetWidth) || 0;
+            if (propH) propH.value = Math.round(el.offsetHeight) || 0;
+            if (propFontSize) propFontSize.value = Math.round(parseFloat(window.getComputedStyle(el).fontSize)) || 16;
+            if (propStrokeSize) propStrokeSize.value = parseFloat(el.style.webkitTextStrokeWidth) || 0;
+
+            if (el.style.color) {
+                const ca = colToHexAlpha(el.style.color);
+                if (fillColorInput && ca.hex !== '#TRANSPARENT') fillColorInput.value = ca.hex;
+                if (fillColorHex) fillColorHex.textContent = ca.hex.replace('#', '');
+                if (fillColorAlpha) fillColorAlpha.value = ca.alpha;
+            }
+
+            const strokeColor = el.style.webkitTextStrokeColor || 'transparent';
+            if (strokeColor !== 'transparent' && strokeColor !== 'rgba(0, 0, 0, 0)') {
+                const ca = colToHexAlpha(strokeColor);
+                if (strokeColorInput && ca.hex !== '#TRANSPARENT') strokeColorInput.value = ca.hex;
+                if (strokeColorHex) strokeColorHex.textContent = ca.hex.replace('#', '');
+                if (strokeColorAlpha) strokeColorAlpha.value = ca.alpha;
+            } else {
+                if (strokeColorAlpha) strokeColorAlpha.value = 0;
+            }
+        } else {
+            // Multiple elements selected, clear inputs
+            if (propX) propX.value = "";
+            if (propY) propY.value = "";
+            if (propW) propW.value = "";
+            if (propH) propH.value = "";
+            if (propFontSize) propFontSize.value = "";
+            if (propStrokeSize) propStrokeSize.value = "";
+        }
+    }
+
+    // Apply properties when input changes
+    function applyPropertyUpdate(prop, value) {
+        selectedElements.forEach(el => {
+            if (prop === 'x') el.style.left = `${value}px`;
+            if (prop === 'y') el.style.top = `${value}px`;
+            if (prop === 'w') {
+                el.style.width = `${value}px`;
+                el.dataset.type = 'box'; // switch to fixed box
+            }
+            if (prop === 'h') {
+                el.style.height = `${value}px`;
+                el.dataset.type = 'box'; // switch to fixed box
+            }
+            if (prop === 'size') {
+                el.style.fontSize = `${value}px`;
+            }
+            if (prop === 'fill') {
+                const alpha = fillColorAlpha ? fillColorAlpha.value : 100;
+                el.style.color = getHexAlphaColor(value, alpha);
+            }
+            if (prop === 'fillAlpha') {
+                const hex = fillColorInput ? fillColorInput.value : '#000000';
+                el.style.color = getHexAlphaColor(hex, value);
+            }
+            if (prop === 'strokeSize') {
+                el.style.webkitTextStrokeWidth = `${value}px`;
+            }
+            if (prop === 'stroke') {
+                const alpha = strokeColorAlpha ? strokeColorAlpha.value : 100;
+                el.style.webkitTextStrokeColor = getHexAlphaColor(value, alpha);
+            }
+            if (prop === 'strokeAlpha') {
+                const hex = strokeColorInput ? strokeColorInput.value : '#000000';
+                el.style.webkitTextStrokeColor = getHexAlphaColor(hex, value);
+            }
+        });
+    }
+
+    if (propX) propX.addEventListener('input', (e) => applyPropertyUpdate('x', e.target.value));
+    if (propY) propY.addEventListener('input', (e) => applyPropertyUpdate('y', e.target.value));
+    if (propW) propW.addEventListener('input', (e) => applyPropertyUpdate('w', e.target.value));
+    if (propH) propH.addEventListener('input', (e) => applyPropertyUpdate('h', e.target.value));
+    if (propFontSize) propFontSize.addEventListener('input', (e) => applyPropertyUpdate('size', e.target.value));
+    if (propStrokeSize) propStrokeSize.addEventListener('input', (e) => applyPropertyUpdate('strokeSize', e.target.value));
+
+    if (fillColorInput) {
+        fillColorInput.addEventListener('input', (e) => {
+            const hex = e.target.value.toUpperCase();
+            if (fillColorHex) fillColorHex.textContent = hex.replace('#', '');
+            applyPropertyUpdate('fill', hex);
+        });
+    }
+    if (fillColorAlpha) {
+        fillColorAlpha.addEventListener('input', (e) => applyPropertyUpdate('fillAlpha', e.target.value));
+    }
+
+    if (strokeColorInput) {
+        strokeColorInput.addEventListener('input', (e) => {
+            const hex = e.target.value.toUpperCase();
+            if (strokeColorHex) strokeColorHex.textContent = hex.replace('#', '');
+            applyPropertyUpdate('stroke', hex);
+        });
+    }
+    if (strokeColorAlpha) {
+        strokeColorAlpha.addEventListener('input', (e) => applyPropertyUpdate('strokeAlpha', e.target.value));
+    }
+
+    // --- Number Input Wheel Scroll Logic ---
+    function setupNumberInputWheel(inputEl) {
+        if (!inputEl) return;
+        inputEl.addEventListener('wheel', (e) => {
+            if (document.activeElement !== inputEl) return; // Only if focused
+            e.preventDefault(); // Stop page scroll
+
+            const step = parseFloat(inputEl.getAttribute('step')) || 1;
+            const min = inputEl.hasAttribute('min') ? parseFloat(inputEl.getAttribute('min')) : -Infinity;
+            const max = inputEl.hasAttribute('max') ? parseFloat(inputEl.getAttribute('max')) : Infinity;
+
+            let val = parseFloat(inputEl.value) || 0;
+            // deltaY > 0 is scroll down (decrease), deltaY < 0 is scroll up (increase)
+            const direction = e.deltaY > 0 ? -1 : 1;
+
+            val += direction * step;
+            val = Math.max(min, Math.min(max, val));
+
+            inputEl.value = val;
+            // Manually trigger input event so applyPropertyUpdate fires
+            inputEl.dispatchEvent(new Event('input'));
+        });
+    }
+
+    setupNumberInputWheel(propX);
+    setupNumberInputWheel(propY);
+    setupNumberInputWheel(propW);
+    setupNumberInputWheel(propH);
+    setupNumberInputWheel(propFontSize);
+    setupNumberInputWheel(propStrokeSize);
+    setupNumberInputWheel(fillColorAlpha);
+    setupNumberInputWheel(strokeColorAlpha);
+
+    // --- Alignment Logic ---
+    const alignBtns = {
+        left: document.getElementById('alignLeftBtn'),
+        center: document.getElementById('alignCenterBtn'),
+        right: document.getElementById('alignRightBtn'),
+        top: document.getElementById('alignTopBtn'),
+        middle: document.getElementById('alignMiddleBtn'),
+        bottom: document.getElementById('alignBottomBtn')
+    };
+
+    function alignElements(type) {
+        if (selectedElements.length === 0) return;
+
+        if (selectedElements.length === 1) {
+            // Align relative to artboard
+            const el = selectedElements[0];
+            const artW = artboard.clientWidth;
+            const artH = artboard.clientHeight;
+            const elW = el.offsetWidth;
+            const elH = el.offsetHeight;
+
+            switch (type) {
+                case 'left': el.style.left = '0px'; break;
+                case 'center': el.style.left = `${(artW - elW) / 2}px`; break;
+                case 'right': el.style.left = `${artW - elW}px`; break;
+                case 'top': el.style.top = '0px'; break;
+                case 'middle': el.style.top = `${(artH - elH) / 2}px`; break;
+                case 'bottom': el.style.top = `${artH - elH}px`; break;
+            }
+            updatePropertiesPanel();
+        } else {
+            // Align multiple elements relative to their bounding box
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            selectedElements.forEach(el => {
+                const l = parseFloat(el.style.left) || 0;
+                const t = parseFloat(el.style.top) || 0;
+                const r = l + el.offsetWidth;
+                const b = t + el.offsetHeight;
+                if (l < minX) minX = l;
+                if (t < minY) minY = t;
+                if (r > maxX) maxX = r;
+                if (b > maxY) maxY = b;
+            });
+
+            const midX = (minX + maxX) / 2;
+            const midY = (minY + maxY) / 2;
+
+            selectedElements.forEach(el => {
+                switch (type) {
+                    case 'left': el.style.left = `${minX}px`; break;
+                    case 'center': el.style.left = `${midX - el.offsetWidth / 2}px`; break;
+                    case 'right': el.style.left = `${maxX - el.offsetWidth}px`; break;
+                    case 'top': el.style.top = `${minY}px`; break;
+                    case 'middle': el.style.top = `${midY - el.offsetHeight / 2}px`; break;
+                    case 'bottom': el.style.top = `${maxY - el.offsetHeight}px`; break;
+                }
+            });
+            updatePropertiesPanel();
+        }
+    }
+
+    if (alignBtns.left) alignBtns.left.addEventListener('click', () => alignElements('left'));
+    if (alignBtns.center) alignBtns.center.addEventListener('click', () => alignElements('center'));
+    if (alignBtns.right) alignBtns.right.addEventListener('click', () => alignElements('right'));
+    if (alignBtns.top) alignBtns.top.addEventListener('click', () => alignElements('top'));
+    if (alignBtns.middle) alignBtns.middle.addEventListener('click', () => alignElements('middle'));
+    if (alignBtns.bottom) alignBtns.bottom.addEventListener('click', () => alignElements('bottom'));
 
     // --- Contact Form Modal Logic ---
     const contactBtn = document.getElementById('contactBtn');

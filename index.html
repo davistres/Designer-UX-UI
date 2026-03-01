@@ -34,7 +34,7 @@
                 <div class="icon-btn tool-active" id="cursorBtn"><span class="material-symbols-outlined">near_me</span>
                 </div>
                 <div class="icon-btn" id="tagBtn"><span class="material-symbols-outlined">tag</span></div>
-                <div class="icon-btn"><span class="material-symbols-outlined">text_fields</span></div>
+                <div class="icon-btn" id="textBtn"><span class="material-symbols-outlined">text_fields</span></div>
                 <div class="icon-btn tooltip-container" id="highFiveBtn" data-tooltip="High five?"
                     style="position: relative;">
                     <span class="material-symbols-outlined">back_hand</span>
@@ -199,42 +199,58 @@
                     <div class="panel-section">
                         <div class="section-header">Align</div>
                         <div class="align-controls">
-                            <span class="material-symbols-outlined">align_horizontal_left</span>
-                            <span class="material-symbols-outlined">align_horizontal_center</span>
-                            <span class="material-symbols-outlined">align_horizontal_right</span>
-                            <span class="material-symbols-outlined">align_vertical_top</span>
-                            <span class="material-symbols-outlined">align_vertical_center</span>
-                            <span class="material-symbols-outlined">align_vertical_bottom</span>
+                            <span class="material-symbols-outlined" id="alignLeftBtn">align_horizontal_left</span>
+                            <span class="material-symbols-outlined" id="alignCenterBtn">align_horizontal_center</span>
+                            <span class="material-symbols-outlined" id="alignRightBtn">align_horizontal_right</span>
+                            <span class="material-symbols-outlined" id="alignTopBtn">align_vertical_top</span>
+                            <span class="material-symbols-outlined" id="alignMiddleBtn">align_vertical_center</span>
+                            <span class="material-symbols-outlined" id="alignBottomBtn">align_vertical_bottom</span>
                         </div>
                     </div>
 
                     <div class="panel-section">
                         <div class="section-header">Layout</div>
                         <div class="prop-row">
-                            <div class="prop-item"><span>X</span> <input type="text" value="0"></div>
-                            <div class="prop-item"><span>Y</span> <input type="text" value="0"></div>
+                            <div class="prop-item"><span>X</span> <input type="number" id="propX" value="0"></div>
+                            <div class="prop-item"><span>Y</span> <input type="number" id="propY" value="0"></div>
                         </div>
                         <div class="prop-row">
-                            <div class="prop-item"><span>W</span> <input type="text" value="1440"></div>
-                            <div class="prop-item"><span>H</span> <input type="text" value="3200"></div>
+                            <div class="prop-item"><span>W</span> <input type="number" id="propW" value="1440"></div>
+                            <div class="prop-item"><span>H</span> <input type="number" id="propH" value="3200"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">Text</div>
+                        <div class="prop-row">
+                            <div class="prop-item"><span>Size</span> <input type="number" id="propFontSize" value="16">
+                            </div>
+                            <div class="prop-item"><span>Stroke</span> <input type="number" id="propStrokeSize"
+                                    value="0"></div>
                         </div>
                     </div>
 
                     <div class="panel-section">
                         <div class="section-header">Fill</div>
                         <div class="color-row">
-                            <div class="color-swatch" style="background: #E5E5E5; border: 1px solid #555;"></div>
-                            <span class="color-hex">E5E5E5</span>
-                            <span class="color-alpha">100%</span>
+                            <input type="color" id="fillColorInput" value="#E5E5E5" class="color-swatch-input">
+                            <span class="color-hex" id="fillColorHex">E5E5E5</span>
+                            <div class="prop-item" style="flex: 0 0 50px; justify-content: flex-end; gap: 2px;">
+                                <input type="number" id="fillColorAlpha" value="100" min="0" max="100"
+                                    style="width: 30px; text-align:right; padding: 4px 0;">%
+                            </div>
                         </div>
                     </div>
 
                     <div class="panel-section">
                         <div class="section-header">Stroke</div>
                         <div class="color-row">
-                            <div class="color-swatch" style="background: #CCCCCC; border: 1px solid #555;"></div>
-                            <span class="color-hex">CCCCCC</span>
-                            <span class="color-alpha">100%</span>
+                            <input type="color" id="strokeColorInput" value="#CCCCCC" class="color-swatch-input">
+                            <span class="color-hex" id="strokeColorHex">CCCCCC</span>
+                            <div class="prop-item" style="flex: 0 0 50px; justify-content: flex-end; gap: 2px;">
+                                <input type="number" id="strokeColorAlpha" value="100" min="0" max="100"
+                                    style="width: 30px; text-align:right; padding: 4px 0;">%
+                            </div>
                         </div>
                     </div>
 
