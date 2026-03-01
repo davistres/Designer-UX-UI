@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David D'AMORE - UX/UI Designer</title>
-    <link rel="stylesheet" href="style.css?v=8">
-    <link rel="stylesheet" href="portfolio.css?v=8">
+    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="portfolio.css?v=10">
 
     <!-- Using Inter font to match Figma's aesthetic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,14 +25,19 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="topbar-left">
-                <div class="figma-logo-container" style="padding-right: 12px; display: flex; align-items: center;">
+                <div class="figma-logo-container tooltip-container" id="logoContainer"
+                    data-tooltip="C'est un hommage... Pas du plagiat!!!! 😅"
+                    style="padding-right: 12px; display: flex; align-items: center; position: relative;">
                     <img id="mainFigmaLogo" src="assets/logo/figma.png" alt="Figma Logo"
-                        style="height: 18px; object-fit: contain;">
+                        style="height: 18px; object-fit: contain; cursor: pointer;">
                 </div>
                 <div class="icon-btn tool-active"><span class="material-symbols-outlined">near_me</span></div>
                 <div class="icon-btn"><span class="material-symbols-outlined">tag</span></div>
                 <div class="icon-btn"><span class="material-symbols-outlined">text_fields</span></div>
-                <div class="icon-btn"><span class="material-symbols-outlined">back_hand</span></div>
+                <div class="icon-btn tooltip-container" id="highFiveBtn" data-tooltip="High five?"
+                    style="position: relative;">
+                    <span class="material-symbols-outlined">back_hand</span>
+                </div>
                 <div class="icon-btn"><span class="material-symbols-outlined">chat_bubble</span></div>
             </div>
 
@@ -48,7 +53,21 @@
                     <div class="avatar more-users">+3</div>
                 </div>
                 <button class="icon-btn share-btn">Share</button>
-                <div class="zoom-level">100% <span class="material-symbols-outlined expand-icon">expand_more</span>
+                <div class="zoom-container" id="zoomContainer">
+                    <div class="zoom-level" id="zoomLevelBtn">
+                        <span id="zoomLevelText">100%</span>
+                        <span class="material-symbols-outlined expand-icon">expand_more</span>
+                    </div>
+                    <div id="zoomMenu" class="zoom-menu hidden">
+                        <div class="zoom-option" data-zoom="0.5">50%</div>
+                        <div class="zoom-option" data-zoom="0.75">75%</div>
+                        <div class="zoom-option" data-zoom="1">100%</div>
+                        <div class="zoom-option" data-zoom="1.25">125%</div>
+                        <div class="zoom-option" data-zoom="1.5">150%</div>
+                        <div class="zoom-option" data-zoom="2">200%</div>
+                        <hr style="border: none; border-top: 1px solid var(--ui-border); margin: 4px 0;">
+                        <div class="zoom-option" data-zoom="fit">Zoom to fit</div>
+                    </div>
                 </div>
                 <button id="presentBtn" class="present-btn">
                     <span class="material-symbols-outlined">play_arrow</span>
@@ -237,7 +256,15 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <!-- HIGH FIVE ANIMATION CONTAINER -->
+    <div id="highFiveAnimation" class="high-five-overlay hidden">
+        <div class="hand left-hand">👋</div>
+        <div class="hand right-hand" style="transform: scaleX(-1);">👋</div>
+    </div>
+
+    <!-- Canvas Confetti for ultra-lightweight particles -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js?v=3"></script>
 </body>
 
 </html>

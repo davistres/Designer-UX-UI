@@ -80,6 +80,7 @@ body.mode-present .artboard-wrapper {
     margin: 0;
     width: 100vw;
     height: 100vh;
+    transform: none !important;
 }
 
 body.mode-present .artboard-label {
@@ -107,7 +108,8 @@ body.mode-present .artboard {
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    z-index: 10;
+    z-index: 200;
+    /* Ensure tooltip overlays left-sidebar (z-index 100) */
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
@@ -216,17 +218,54 @@ body.mode-present .artboard {
     cursor: pointer;
 }
 
+.zoom-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .zoom-level {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 4px;
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 4px;
+    user-select: none;
+    min-width: 65px;
+    /* Keeps width constant so neighbor elements don't shift */
 }
 
 .zoom-level:hover {
     background-color: var(--ui-hover);
+}
+
+.zoom-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background-color: var(--ui-bg);
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    padding: 4px 0;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.zoom-option {
+    padding: 6px 16px;
+    cursor: pointer;
+    color: var(--ui-text);
+    font-size: 11px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.zoom-option:hover {
+    background-color: var(--ui-accent);
+    color: white;
 }
 
 .present-btn {
@@ -536,7 +575,8 @@ body.mode-present .artboard {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top center;
 }
 
 .artboard-label {
@@ -598,4 +638,148 @@ body.mode-present .artboard {
 .exit-present-btn:hover {
     background: rgba(50, 50, 50, 0.9);
     transform: translateX(-50%) translateY(-2px);
+}
+
+/* =========================================
+   TOOLTIPS
+   ========================================= */
+.tooltip-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip-container::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: var(--ui-bg);
+    color: var(--ui-text);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    border: 1px solid var(--ui-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Custom positioning for main logo so tooltip doesn't bleed off edge */
+#logoContainer::after {
+    left: 0;
+    transform: translateX(0) translateY(10px);
+}
+
+/* Visibility (hover on desktop, or class toggled on mobile) */
+@media (hover: hover) {
+    .tooltip-container:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    #logoContainer:hover::after {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+.tooltip-container.tooltip-mobile-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#logoContainer.tooltip-mobile-visible::after {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+}
+
+/* =========================================
+   HIGH FIVE ANIMATION
+   ========================================= */
+.high-five-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.high-five-overlay.hidden {
+    display: none;
+}
+
+.hand {
+    position: absolute;
+    top: 50%;
+    font-size: clamp(8rem, 20vw, 15rem);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+    transform-origin: center;
+    line-height: 1;
+    opacity: 0;
+}
+
+/* Base states: hidden far offscreen */
+.hand.left-hand {
+    left: 50%;
+    transform: translate(-100vw, -50%) rotate(-45deg);
+}
+
+.hand.right-hand {
+    right: 50%;
+    transform: scaleX(-1) translate(-100vw, -50%) rotate(-45deg);
+}
+
+/* Animating in to the center to TOUCH */
+.high-five-overlay.animating .hand.left-hand {
+    opacity: 1;
+    transform: translate(-45%, -50%) rotate(10deg);
+}
+
+.high-five-overlay.animating .hand.right-hand {
+    opacity: 1;
+    transform: scaleX(-1) translate(-45%, -50%) rotate(10deg);
+}
+
+/* Hard slap impact pushing slightly deeper into each other */
+@keyframes highFiveSlap {
+    0% {
+        transform: translate(-45%, -50%) rotate(10deg) scale(1);
+    }
+
+    50% {
+        transform: translate(-35%, -50%) rotate(18deg) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-45%, -50%) rotate(10deg) scale(1);
+    }
+}
+
+@keyframes highFiveSlapRight {
+    0% {
+        transform: scaleX(-1) translate(-45%, -50%) rotate(10deg) scale(1);
+    }
+
+    50% {
+        transform: scaleX(-1) translate(-35%, -50%) rotate(18deg) scale(1.1);
+    }
+
+    100% {
+        transform: scaleX(-1) translate(-45%, -50%) rotate(10deg) scale(1);
+    }
+}
+
+/* Applying the strong slap animation */
+.high-five-overlay.slap .hand.left-hand {
+    animation: highFiveSlap 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.high-five-overlay.slap .hand.right-hand {
+    animation: highFiveSlapRight 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
