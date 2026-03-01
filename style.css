@@ -685,6 +685,20 @@ body.mode-present .artboard {
     transform: translateX(0) translateY(10px);
 }
 
+/* Custom positioning for avatars so tooltip doesn't bleed off right edge */
+#avatarsContainer::after {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: 100%;
+    transform: translateX(0) translateY(10px);
+    white-space: normal;
+    /* Override nowrap for long text */
+    width: 250px;
+    text-align: right;
+    line-height: 1.4;
+}
+
 /* Visibility (hover on desktop, or class toggled on mobile) */
 @media (hover: hover) {
     .tooltip-container:hover::after {
@@ -692,7 +706,8 @@ body.mode-present .artboard {
         transform: translateX(-50%) translateY(0);
     }
 
-    #logoContainer:hover::after {
+    #logoContainer:hover::after,
+    #avatarsContainer:hover::after {
         transform: translateX(0) translateY(0);
     }
 }
@@ -702,7 +717,8 @@ body.mode-present .artboard {
     transform: translateX(-50%) translateY(0);
 }
 
-#logoContainer.tooltip-mobile-visible::after {
+#logoContainer.tooltip-mobile-visible::after,
+#avatarsContainer.tooltip-mobile-visible::after {
     opacity: 1;
     transform: translateX(0) translateY(0);
 }

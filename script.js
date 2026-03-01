@@ -296,21 +296,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const highFiveBtn = document.getElementById('highFiveBtn');
     const highFiveOverlay = document.getElementById('highFiveAnimation');
     const logoContainer = document.getElementById('logoContainer');
+    const avatarsContainer = document.getElementById('avatarsContainer');
 
     // Handle mobile tooltips (tap to show, tap elsewhere to hide)
     document.addEventListener('click', (e) => {
         // If clicking on logoContainer directly, toggle it
         if (logoContainer && logoContainer.contains(e.target)) {
             logoContainer.classList.toggle('tooltip-mobile-visible');
+        } else if (avatarsContainer && avatarsContainer.contains(e.target)) {
+            avatarsContainer.classList.toggle('tooltip-mobile-visible');
         } else {
             // Hide all tooltips if clicking outside
             tooltips.forEach(t => {
-                if (t !== highFiveBtn && t !== logoContainer) {
+                if (t !== highFiveBtn && t !== logoContainer && t !== avatarsContainer) {
                     t.classList.remove('tooltip-mobile-visible');
                 }
             });
             if (logoContainer && !logoContainer.contains(e.target)) {
                 logoContainer.classList.remove('tooltip-mobile-visible');
+            }
+            if (avatarsContainer && !avatarsContainer.contains(e.target)) {
+                avatarsContainer.classList.remove('tooltip-mobile-visible');
             }
         }
     });
@@ -327,9 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
             lastClickTime = currentTime;
 
             // Always manage tooltips on click for mobile
-            if (!logoContainer.contains(e.target)) {
+            if (!logoContainer.contains(e.target) && (!avatarsContainer || !avatarsContainer.contains(e.target))) {
                 highFiveBtn.classList.add('tooltip-mobile-visible');
                 logoContainer.classList.remove('tooltip-mobile-visible');
+                if (avatarsContainer) avatarsContainer.classList.remove('tooltip-mobile-visible');
             }
 
             // Only trigger on fast double click (<400ms)
