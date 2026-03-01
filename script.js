@@ -70,6 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     proCard.classList.add('hidden');
                 }
             }
+
+            // Share Card outside click handling
+            const shareBtn = document.getElementById('shareBtn');
+            const shareCard = document.getElementById('shareCard');
+            if (shareBtn && shareCard) {
+                if (!shareBtn.contains(e.target) && !shareCard.contains(e.target)) {
+                    shareCard.classList.add('hidden');
+                }
+            }
         });
 
         // Profile Card explicit toggle handling
@@ -79,6 +88,49 @@ document.addEventListener('DOMContentLoaded', () => {
             proExpBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 proCard.classList.toggle('hidden');
+            });
+        }
+
+        // Share Card explicit toggle handling
+        const shareBtn = document.getElementById('shareBtn');
+        const shareCard = document.getElementById('shareCard');
+        if (shareBtn && shareCard) {
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                shareCard.classList.toggle('hidden');
+            });
+
+            // Social sharing buttons
+            const socialBtns = shareCard.querySelectorAll('.social-btn');
+            socialBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const network = btn.getAttribute('data-network');
+                    // We use a predefined URL or the current location if run on a server
+                    const url = encodeURIComponent(window.location.protocol === 'file:' ? 'https://david-damore-portfolio.design' : window.location.href);
+                    const title = encodeURIComponent("Découvrez le portfolio de David D'AMORE, UX/UI Designer !");
+
+                    let shareUrl = '';
+                    switch (network) {
+                        case 'linkedin':
+                            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                            break;
+                        case 'twitter':
+                            shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                            break;
+                        case 'facebook':
+                            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                            break;
+                        case 'whatsapp':
+                            shareUrl = `https://api.whatsapp.com/send?text=${title} - ${url}`;
+                            break;
+                        case 'email':
+                            shareUrl = `mailto:?subject=${title}&body=${encodeURIComponent("Je tenais à partager ce super portfolio avec toi : ")}${url}`;
+                            break;
+                    }
+                    if (shareUrl) {
+                        window.open(shareUrl, network === 'email' ? '_self' : '_blank');
+                    }
+                });
             });
         }
 
