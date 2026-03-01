@@ -61,7 +61,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!zoomContainer.contains(e.target)) {
                 zoomMenu.classList.add('hidden');
             }
+
+            // Profile Card outside click handling
+            const proExpBtn = document.getElementById('profileExpandBtn');
+            const proCard = document.getElementById('profileCard');
+            if (proExpBtn && proCard) {
+                if (!proExpBtn.contains(e.target) && !proCard.contains(e.target)) {
+                    proCard.classList.add('hidden');
+                }
+            }
         });
+
+        // Profile Card explicit toggle handling
+        const proExpBtn = document.getElementById('profileExpandBtn');
+        const proCard = document.getElementById('profileCard');
+        if (proExpBtn && proCard) {
+            proExpBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                proCard.classList.toggle('hidden');
+            });
+        }
 
         const zoomOptions = zoomMenu.querySelectorAll('.zoom-option');
         zoomOptions.forEach(option => {
