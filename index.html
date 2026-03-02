@@ -58,13 +58,16 @@
                             fine culture web, je transforme des problématiques complexes en interfaces limpides,
                             esthétiques et résolument centrées sur le besoin utilisateur.
                         </p>
+                        <p
+                            style="font-size: 10px; margin-top: 10px; color: var(--ui-text-muted); opacity: 0.8; font-style: italic; text-align: justify;">
+                            Désolé, cette phrase est vraiment trop longue...</p>
                     </div>
                 </div>
             </div>
 
             <div class="topbar-right">
                 <div class="avatars tooltip-container" id="avatarsContainer"
-                    data-tooltip="Non, ce n'est pas un projet collaboratif... C'est mon portfolio perso !!! Mais si vous voulez qu'on collabore ensemble, n'hésitez pas ! CONTACTEZ MOI sur ce mail : csfwebdesign@gmail.com">
+                    data-tooltip="Non, ce n'est pas un projet collaboratif... C'est mon portfolio perso !!! Mais si vous voulez qu'on collabore ensemble, n'hésitez pas ! CONTACTEZ MOI (csfwebdesign@gmail.com)!">
                     <img src="https://i.pravatar.cc/150?img=11" alt="User 1" class="avatar">
                     <img src="https://i.pravatar.cc/150?img=32" alt="User 2" class="avatar">
                     <div class="avatar more-users">+3</div>
@@ -147,35 +150,68 @@
             <!-- LEFT SIDEBAR (LAYERS) -->
             <aside class="sidebar left-sidebar">
                 <div class="sidebar-tabs">
-                    <div class="tab active">File</div>
-                    <div class="tab">Assets</div>
+                    <div class="tab active" id="tabFile">File</div>
+                    <div class="tab" id="tabAssets">Assets</div>
                 </div>
-                <div class="sidebar-content">
-                    <div class="layer-item folder open">
-                        <span class="material-symbols-outlined layer-icon">keyboard_arrow_down</span>
+
+                <!-- File/Layers Tab Content -->
+                <div class="sidebar-content" id="contentFile">
+                    <div class="layer-item folder open" style="cursor: pointer;" id="layerDesktopFolder">
+                        <span class="material-symbols-outlined layer-icon"
+                            id="layerDesktopToggleIcon">keyboard_arrow_down</span>
                         <span class="material-symbols-outlined layer-icon">tag</span>
                         Desktop - Portfolio
                     </div>
-                    <div class="layer-item indent">
-                        <span class="material-symbols-outlined layer-icon">grid_view</span>
-                        Navbar
+                    <!-- Children group -->
+                    <div id="layerDesktopChildren">
+                        <div class="layer-item indent">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Navbar
+                        </div>
+                        <div class="layer-item indent">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Hero Section
+                        </div>
+                        <div class="layer-item indent">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Selected Projects
+                        </div>
+                        <div class="layer-item indent">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            About Me
+                        </div>
+                        <div class="layer-item indent">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Footer / Contact
+                        </div>
                     </div>
-                    <div class="layer-item indent">
-                        <span class="material-symbols-outlined layer-icon">grid_view</span>
-                        Hero Section
+                </div>
+
+                <!-- Assets Tab Content -->
+                <div class="sidebar-content hidden" id="contentAssets"
+                    style="padding: 16px; display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <h3 style="font-size: 14px; margin: 0 0 8px; color: var(--ui-text); font-weight: 600;">
+                            Disponibilité et localisation</h3>
+                        <p
+                            style="font-size: 12px; margin: 0; color: var(--ui-text-muted); line-height: 1.5; text-align: justify;">
+                            À Sète, à
+                            Aix, à Orléans, à Montpellier, à Paris... Je suis disponible et mobile partout en France.
+                        </p>
                     </div>
-                    <div class="layer-item indent">
-                        <span class="material-symbols-outlined layer-icon">grid_view</span>
-                        Selected Projects
+
+                    <div class="france-map-container"
+                        style="background: var(--ui-hover); border-radius: 8px; padding: 0; display: flex; justify-content: center; align-items: center; border: 1px solid var(--ui-border); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                        <iframe width="100%" height="250"
+                            style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(1.1) contrast(85%); pointer-events: auto;"
+                            loading="lazy" allowfullscreen
+                            src="https://maps.google.com/maps?q=France&t=&z=5&ie=UTF8&iwloc=&output=embed"></iframe>
                     </div>
-                    <div class="layer-item indent">
-                        <span class="material-symbols-outlined layer-icon">grid_view</span>
-                        About Me
-                    </div>
-                    <div class="layer-item indent">
-                        <span class="material-symbols-outlined layer-icon">grid_view</span>
-                        Footer / Contact
-                    </div>
+
+                    <p
+                        style="font-size: 12px; margin: 0; color: var(--ui-text-muted); line-height: 1.5; text-align: justify;">
+                        Sinon, le full
+                        remote, c'est pas mal aussi... Mais je m'adapterai à vos besoins.</p>
                 </div>
             </aside>
 
@@ -247,11 +283,13 @@
             <!-- RIGHT SIDEBAR (PROPERTIES) -->
             <aside class="sidebar right-sidebar">
                 <div class="sidebar-tabs">
-                    <div class="tab active">Design</div>
-                    <div class="tab">Prototype</div>
-                    <div class="tab">Inspect</div>
+                    <div class="tab active" id="tabDesignRight">Design</div>
+                    <div class="tab" id="tabPrototypeRight">Prototype</div>
+                    <div class="tab" id="tabInspectRight">Inspect</div>
                 </div>
-                <div class="sidebar-content properties-panel">
+
+                <!-- DESIGN TAB CONTENT -->
+                <div class="sidebar-content properties-panel" id="contentDesignRight">
 
                     <div class="panel-section">
                         <div class="section-header">Align</div>
@@ -312,13 +350,62 @@
                     </div>
 
                     <div class="panel-msg">
-                        <p style="color: #888; font-size: 11px; padding: 10px 0; line-height: 1.4;">
+                        <p
+                            style="color: #888; font-size: 11px; padding: 10px 10px; line-height: 1.4; text-align: justify;">
                             ℹ️ Survolez la zone de travail pour afficher le design haute fidélité. Cliquez sur «
                             Present » (le logo en haut à droite en forme de triangle) pour voir le portfolio interactif
                             complet.
                         </p>
                     </div>
 
+                </div>
+
+                <!-- PROTOTYPE TAB CONTENT -->
+                <div class="sidebar-content hidden properties-panel" id="contentPrototypeRight">
+                    <div class="panel-section" style="border-bottom: none;">
+                        <div class="section-header" style="margin-bottom: 12px; font-size: 14px;">Rigueur & Adaptabilité
+                        </div>
+
+                        <!-- Before/After Slider -->
+                        <div class="ba-slider-container" id="identitySlider"
+                            style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden; border: 1px solid var(--ui-border); cursor: ew-resize; user-select: none; margin-bottom: 12px;">
+                            <!-- Right Image (Creative) -->
+                            <img src="assets/photo/creative_profile.png" alt="Creative Profile" class="ba-image-base"
+                                draggable="false"
+                                style="width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.2);">
+                            <!-- Left Image (Professional) Clipped -->
+                            <img src="assets/photo/professional_profile.png" alt="Professional Profile"
+                                draggable="false" class="ba-image-overlay" id="baOverlayImg"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; clip-path: inset(0 50% 0 0);">
+
+                            <!-- Slider Custom Handle -->
+                            <div class="ba-slider-handle" id="baHandle"
+                                style="position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: white; pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); transform: translateX(-50%); z-index: 10;">
+                                <div
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; background: white; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-symbols-outlined"
+                                        style="color: #333; font-size: 14px; font-weight: bold;">code</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p
+                            style="font-size: 10px; margin: 0; color: var(--ui-text-muted); opacity: 0.8; font-style: italic; text-align: justify;">
+                            Ce portfolio reflète ma personnalité : authentique et sans filtre. Cependant, je fais très
+                            bien la part des choses : face à un brief, mon sens de l'adaptation et mon professionnalisme
+                            prennent toujours le dessus. Jugez-en par vous-même à travers mes réalisations.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- INSPECT TAB CONTENT -->
+                <div class="sidebar-content hidden properties-panel" id="contentInspectRight">
+                    <div class="panel-section">
+                        <div class="section-header">CSS Hand-off</div>
+                        <p style="color: #888; font-size: 11px; padding: 10px 0; line-height: 1.4;">
+                            Code snippets will appear here when you select an element.
+                        </p>
+                    </div>
                 </div>
             </aside>
         </main>
@@ -339,26 +426,26 @@
     <!-- CONTACT FORM MODAL -->
     <div id="contactModal" class="contact-modal hidden">
         <div class="contact-header">
-            <h3>Send me a message</h3>
+            <h3>Envoyez moi un message</h3>
             <button id="closeContactBtn" class="close-btn"><span class="material-symbols-outlined">close</span></button>
         </div>
-        <form id="contactForm" action="https://formsubmit.co/csfwebdesign@gmail.com" method="POST">
-            <!-- FormSubmit config -->
-            <input type="hidden" name="_subject" value="New message from Portfolio Form!">
-            <input type="hidden" name="_next" value="#">
-            <input type="hidden" name="_captcha" value="false">
+        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+            <!-- Web3Forms config -->
+            <input type="hidden" name="access_key" value="e40f8bf5-12da-44c9-9b2f-b11323f91638">
+            <input type="hidden" name="subject" value="Nouveau message depuis le Portfolio !">
+            <input type="hidden" name="from_name" value="Portfolio Contact">
 
             <div class="form-group">
-                <label for="senderEmail">Your Email</label>
+                <label for="senderEmail">Votre email</label>
                 <input type="email" id="senderEmail" name="email" placeholder="hello@example.com" required>
             </div>
             <div class="form-group">
                 <label for="senderMessage">Message</label>
-                <textarea id="senderMessage" name="message" rows="4" placeholder="How can I help you?"
+                <textarea id="senderMessage" name="message" rows="4" placeholder="Comment puis-je vous aider ?"
                     required></textarea>
             </div>
             <button type="submit" class="submit-btn" id="submitContactBtn">
-                <span class="material-symbols-outlined">send</span> Send
+                <span class="material-symbols-outlined">send</span> Envoyer
             </button>
             <div id="formStatusMsg" class="form-status-msg hidden"></div>
         </form>

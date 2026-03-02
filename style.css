@@ -695,7 +695,8 @@ body.mode-present .artboard {
     white-space: normal;
     /* Override nowrap for long text */
     width: 250px;
-    text-align: right;
+    text-align: justify;
+    /* Justify text for long multi-sentence messages */
     line-height: 1.4;
 }
 
@@ -1070,7 +1071,6 @@ body.mode-present .artboard {
 
 .profile-card-img {
     width: 80px;
-    height: 80px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--ui-accent);
@@ -1098,6 +1098,7 @@ body.mode-present .artboard {
     font-size: 11px;
     line-height: 1.5;
     color: var(--ui-text-muted);
+    text-align: justify;
 }
 
 /* =========================================
@@ -1167,3 +1168,7 @@ body.mode-present .artboard {
     width: 18px;
     height: 18px;
 }
+
+/* =========================================
+   ASSETS MAP (FRANCE)
+   ========================================= */

@@ -291,6 +291,141 @@ document.addEventListener('DOMContentLoaded', () => {
         workspace.classList.toggle('right-open');
     });
 
+    // --- Left Sidebar Tabs Logic ---
+    const tabFile = document.getElementById('tabFile');
+    const tabAssets = document.getElementById('tabAssets');
+    const contentFile = document.getElementById('contentFile');
+    const contentAssets = document.getElementById('contentAssets');
+
+    if (tabFile && tabAssets && contentFile && contentAssets) {
+        tabFile.addEventListener('click', () => {
+            tabFile.classList.add('active');
+            tabAssets.classList.remove('active');
+            contentFile.classList.remove('hidden');
+            contentAssets.classList.add('hidden');
+        });
+        tabAssets.addEventListener('click', () => {
+            tabAssets.classList.add('active');
+            tabFile.classList.remove('active');
+            contentAssets.classList.remove('hidden');
+            contentFile.classList.add('hidden');
+        });
+    }
+
+    // --- Right Sidebar Tabs Logic ---
+    const tabDesignRight = document.getElementById('tabDesignRight');
+    const tabPrototypeRight = document.getElementById('tabPrototypeRight');
+    const tabInspectRight = document.getElementById('tabInspectRight');
+    const contentDesignRight = document.getElementById('contentDesignRight');
+    const contentPrototypeRight = document.getElementById('contentPrototypeRight');
+    const contentInspectRight = document.getElementById('contentInspectRight');
+
+    if (tabDesignRight && tabPrototypeRight && tabInspectRight) {
+        const resetRightTabs = () => {
+            tabDesignRight.classList.remove('active');
+            tabPrototypeRight.classList.remove('active');
+            tabInspectRight.classList.remove('active');
+            contentDesignRight?.classList.add('hidden');
+            contentPrototypeRight?.classList.add('hidden');
+            contentInspectRight?.classList.add('hidden');
+        };
+
+        tabDesignRight.addEventListener('click', () => {
+            resetRightTabs();
+            tabDesignRight.classList.add('active');
+            contentDesignRight?.classList.remove('hidden');
+        });
+
+        tabPrototypeRight.addEventListener('click', () => {
+            resetRightTabs();
+            tabPrototypeRight.classList.add('active');
+            contentPrototypeRight?.classList.remove('hidden');
+        });
+
+        tabInspectRight.addEventListener('click', () => {
+            resetRightTabs();
+            tabInspectRight.classList.add('active');
+            contentInspectRight?.classList.remove('hidden');
+        });
+    }
+
+    // --- Before/After Identity Slider Logic ---
+    const identitySlider = document.getElementById('identitySlider');
+    const baOverlayImg = document.getElementById('baOverlayImg');
+    const baHandle = document.getElementById('baHandle');
+
+    if (identitySlider && baOverlayImg && baHandle) {
+        let isDragging = false;
+
+        const moveSlider = (clientX) => {
+            const rect = identitySlider.getBoundingClientRect();
+            // Calculate relative X position
+            let x = clientX - rect.left;
+            // Constrain to slider bounds
+            x = Math.max(0, Math.min(rect.width, x));
+
+            // Convert to percentage
+            const percent = (x / rect.width) * 100;
+
+            // Adjust Handle position
+            baHandle.style.left = `${percent}%`;
+            // Adjust clip-path inset(top right bottom left) -> right is 100 - percent
+            baOverlayImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+        };
+
+        const onStart = (e) => {
+            // Prevent default browser behaviors like native dragging or text selection
+            if (e.cancelable) e.preventDefault();
+            isDragging = true;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            moveSlider(clientX);
+        };
+
+        const onMove = (e) => {
+            if (!isDragging) return;
+            // Prevent default here too for touch devices (prevents page scrolling while sliding)
+            if (e.cancelable) e.preventDefault();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            moveSlider(clientX);
+        };
+
+        const onEnd = () => {
+            isDragging = false;
+        };
+
+        // Note: active listeners (non-passive) are needed to correctly preventDefault on touch events
+        identitySlider.addEventListener('mousedown', onStart);
+        identitySlider.addEventListener('touchstart', onStart, { passive: false });
+
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
+
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchend', onEnd);
+    }
+
+    // --- Layers Panel Toggle Logic ---
+    const layerDesktopFolder = document.getElementById('layerDesktopFolder');
+    const layerDesktopChildren = document.getElementById('layerDesktopChildren');
+    const layerDesktopToggleIcon = document.getElementById('layerDesktopToggleIcon');
+
+    if (layerDesktopFolder && layerDesktopChildren && layerDesktopToggleIcon) {
+        // Toggle open/close logic
+        layerDesktopFolder.addEventListener('click', (e) => {
+            // Prevent selection if clicking the folder itself instead of text; we'll just toggle for now
+            layerDesktopFolder.classList.toggle('open');
+            const isOpen = layerDesktopFolder.classList.contains('open');
+
+            if (isOpen) {
+                layerDesktopChildren.classList.remove('hidden');
+                layerDesktopToggleIcon.textContent = 'keyboard_arrow_down';
+            } else {
+                layerDesktopChildren.classList.add('hidden');
+                layerDesktopToggleIcon.textContent = 'keyboard_arrow_right';
+            }
+        });
+    }
+
     // --- Tooltip & Interactive Animations ---
     const tooltips = document.querySelectorAll('.tooltip-container');
     const highFiveBtn = document.getElementById('highFiveBtn');
@@ -1073,16 +1208,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Handle AJAX form submission so page doesn't reload
+        // Handle AJAX form submission for a seamless UX
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                const data = new FormData(contactForm);
-                submitContactBtn.disabled = true;
-                submitContactBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">autorenew</span> Sending...';
+                const submitContactBtn = document.getElementById('submitContactBtn');
+                const formStatusMsg = document.getElementById('formStatusMsg');
 
-                // Little CSS for spinning
+                // Form data preparation
+                const formData = new FormData(contactForm);
+
+                // UI Loading state
+                submitContactBtn.disabled = true;
+                submitContactBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">autorenew</span> Envoi...';
+
                 if (!document.getElementById('spinnerStyle')) {
                     const style = document.createElement('style');
                     style.id = 'spinnerStyle';
@@ -1090,35 +1230,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.head.appendChild(style);
                 }
 
+                formStatusMsg.classList.add('hidden');
+
                 try {
-                    const response = await fetch(contactForm.action, {
+                    // Using Web3Forms AJAX endpoint
+                    const response = await fetch('https://api.web3forms.com/submit', {
                         method: 'POST',
-                        body: data,
+                        body: formData,
                         headers: {
                             'Accept': 'application/json'
                         }
                     });
 
                     if (response.ok) {
-                        formStatusMsg.textContent = "Message sent successfully!";
+                        formStatusMsg.textContent = "Message envoyé avec succès !";
                         formStatusMsg.className = "form-status-msg success";
                         contactForm.reset();
 
-                        // Auto close after 3s
                         setTimeout(() => {
                             contactModal.classList.add('hidden');
                             formStatusMsg.classList.add('hidden');
                         }, 3000);
                     } else {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Erreur serveur Web3Forms");
                     }
                 } catch (error) {
-                    formStatusMsg.textContent = "Oops! Something went wrong.";
+                    console.error("Erreur d'envoi:", error);
+                    formStatusMsg.innerHTML = "Oups ! Un problème est survenu lors de l'envoi.";
                     formStatusMsg.className = "form-status-msg error";
                 } finally {
                     formStatusMsg.classList.remove('hidden');
                     submitContactBtn.disabled = false;
-                    submitContactBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Send';
+                    submitContactBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Envoyer';
                 }
             });
         }
