@@ -404,6 +404,56 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('touchend', onEnd);
     }
 
+    // --- Inspect Tab Scanner Logic ---
+    const scannerContainer = document.getElementById('scannerContainer');
+    const scannerImage = document.getElementById('scannerImage');
+    const scannerTextLayer = document.getElementById('scannerTextLayer');
+    const scannerRing = document.getElementById('scannerRing');
+
+    if (scannerContainer && scannerImage && scannerTextLayer && scannerRing) {
+
+        const updateScanner = (e) => {
+            const rect = scannerContainer.getBoundingClientRect();
+            // Works for both mouse and touch events
+            const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+
+            if (clientX === undefined || clientY === undefined) return;
+
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            // Check if hovering over the actual image element
+            // (the transparent borders of the image still count as the image DOM element)
+            if (e.target === scannerImage) {
+                scannerTextLayer.style.opacity = '1';
+                scannerRing.style.opacity = '1';
+
+                const radius = 60; // Half of 120px ring width
+                scannerTextLayer.style.clipPath = `circle(${radius}px at ${x}px ${y}px)`;
+
+                scannerRing.style.left = `${x}px`;
+                scannerRing.style.top = `${y}px`;
+            } else {
+                scannerTextLayer.style.opacity = '0';
+                scannerRing.style.opacity = '0';
+            }
+        };
+
+        scannerContainer.addEventListener('mousemove', updateScanner);
+        scannerContainer.addEventListener('touchmove', updateScanner, { passive: true });
+
+        scannerContainer.addEventListener('mouseleave', () => {
+            scannerTextLayer.style.opacity = '0';
+            scannerRing.style.opacity = '0';
+        });
+
+        scannerContainer.addEventListener('touchend', () => {
+            scannerTextLayer.style.opacity = '0';
+            scannerRing.style.opacity = '0';
+        });
+    }
+
     // --- Layers Panel Toggle Logic ---
     const layerDesktopFolder = document.getElementById('layerDesktopFolder');
     const layerDesktopChildren = document.getElementById('layerDesktopChildren');
