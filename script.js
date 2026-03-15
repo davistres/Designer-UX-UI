@@ -24,32 +24,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Zoom Logic ---
+    // --- Canvas Pan + Zoom System ---
     const zoomContainer = document.getElementById('zoomContainer');
     const zoomLevelBtn = document.getElementById('zoomLevelBtn');
     const zoomLevelText = document.getElementById('zoomLevelText');
     const zoomMenu = document.getElementById('zoomMenu');
-    const artboardWrapper = document.querySelector('.artboard-wrapper');
     const canvasSection = document.getElementById('canvas');
-    let currentZoom = 1;
+    const canvasViewport = document.getElementById('canvasViewport');
 
-    function applyZoom(zoomValue) {
-        currentZoom = zoomValue;
+    let canvasZoom = 1;
+    let canvasPanX = 0;
+    let canvasPanY = 0;
+
+    const FRAME_POSITIONS = {
+        'wrapper-portfolio-artboard': { x: 0,     y: 0    },
+        'wrapper-project-1':         { x: 0,  y: -1500 },
+        'wrapper-project-2':         { x: -2000,    y: -3000 },
+        'wrapper-project-3':         { x: 3000,   y: -900 },
+        'wrapper-project-4':         { x: -3000,  y: -700  },
+        'wrapper-project-5':         { x: 1800,   y: 250  },
+        'wrapper-project-7':         { x: -3000,  y: 4000 },
+        'wrapper-project-8':         { x: -2000,    y: 800 },
+        'wrapper-project-9':         { x: 1600,   y: 2500 },
+        'wrapper-project-10':        { x: -800,  y: 3500 },
+        'wrapper-project-11':        { x: 4000,    y: -4000 },
+        'wrapper-project-12':        { x: -12000,   y: 1650 },
+    };
+
+    function applyCanvasTransform() {
+        if (!canvasViewport) return;
+        canvasViewport.style.transform = `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasZoom})`;
         if (zoomLevelText) {
-            zoomLevelText.textContent = `${Math.round(currentZoom * 100)}%`;
-        }
-        if (artboardWrapper) {
-            artboardWrapper.style.transform = `scale(${currentZoom})`;
-
-            // Adjust margin bottom to allow scrolling when scaled up
-            if (currentZoom > 1) {
-                const extraHeight = artboardWrapper.offsetHeight * (currentZoom - 1);
-                artboardWrapper.style.marginBottom = `${extraHeight}px`;
-            } else {
-                artboardWrapper.style.marginBottom = '0px';
-            }
+            zoomLevelText.textContent = `${Math.round(canvasZoom * 100)}%`;
         }
     }
+
+    function initCanvasPositions() {
+        Object.entries(FRAME_POSITIONS).forEach(([id, pos]) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.left = pos.x + 'px';
+                el.style.top = pos.y + 'px';
+            }
+        });
+    }
+
+    function initCanvasView() {
+        if (!canvasSection) return;
+        const w = canvasSection.clientWidth;
+        const artboardW = 1200;
+        const fitZoom = Math.min(1, (w - 80) / artboardW);
+        canvasZoom = fitZoom;
+        canvasPanX = (w - artboardW * canvasZoom) / 2;
+        canvasPanY = 80;
+        applyCanvasTransform();
+    }
+
+    function navigateTo(wrapperId) {
+        if (!canvasSection) return;
+        const pos = FRAME_POSITIONS[wrapperId];
+        if (!pos) return;
+        const w = canvasSection.clientWidth;
+        const h = canvasSection.clientHeight;
+        const artboardW = 1200;
+        const targetZoom = Math.min(1, (w - 120) / artboardW);
+        canvasZoom = targetZoom;
+        canvasPanX = w / 2 - (pos.x + artboardW / 2) * canvasZoom;
+        canvasPanY = h / 2 - (pos.y + 400) * canvasZoom;
+        applyCanvasTransform();
+    }
+
+    initCanvasPositions();
+    setTimeout(initCanvasView, 50);
 
     if (zoomContainer && zoomMenu && zoomLevelBtn) {
         zoomLevelBtn.addEventListener('click', (e) => {
@@ -62,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 zoomMenu.classList.add('hidden');
             }
 
-            // Profile Card outside click handling
             const proExpBtn = document.getElementById('profileExpandBtn');
             const proCard = document.getElementById('profileCard');
             if (proExpBtn && proCard) {
@@ -71,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Share Card outside click handling
             const shareBtn = document.getElementById('shareBtn');
             const shareCard = document.getElementById('shareCard');
             if (shareBtn && shareCard) {
@@ -81,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Profile Card explicit toggle handling
         const proExpBtn = document.getElementById('profileExpandBtn');
         const proCard = document.getElementById('profileCard');
         if (proExpBtn && proCard) {
@@ -91,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Share Card explicit toggle handling
         const shareBtn = document.getElementById('shareBtn');
         const shareCard = document.getElementById('shareCard');
         if (shareBtn && shareCard) {
@@ -100,15 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 shareCard.classList.toggle('hidden');
             });
 
-            // Social sharing buttons
             const socialBtns = shareCard.querySelectorAll('.social-btn');
             socialBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const network = btn.getAttribute('data-network');
-                    // We use a predefined URL or the current location if run on a server
                     const url = encodeURIComponent(window.location.protocol === 'file:' ? 'https://david-damore-portfolio.design' : window.location.href);
                     const title = encodeURIComponent("Découvrez le portfolio de David D'AMORE, UX/UI Designer !");
-
                     let shareUrl = '';
                     switch (network) {
                         case 'linkedin':
@@ -139,38 +178,36 @@ document.addEventListener('DOMContentLoaded', () => {
             option.addEventListener('click', () => {
                 const zoom = option.getAttribute('data-zoom');
                 if (zoom === 'fit') {
-                    if (canvasSection) {
-                        const canvasWidth = canvasSection.clientWidth - 80;
-                        const artboardWidth = 1200;
-                        let fitZoom = canvasWidth / artboardWidth;
-                        if (fitZoom > 1) fitZoom = 1;
-                        applyZoom(fitZoom);
-                    }
+                    initCanvasView();
                 } else {
-                    applyZoom(parseFloat(zoom));
+                    const cx = canvasSection ? canvasSection.clientWidth / 2 : window.innerWidth / 2;
+                    const cy = canvasSection ? canvasSection.clientHeight / 2 : window.innerHeight / 2;
+                    const worldX = (cx - canvasPanX) / canvasZoom;
+                    const worldY = (cy - canvasPanY) / canvasZoom;
+                    canvasZoom = Math.max(0.05, Math.min(4, parseFloat(zoom)));
+                    canvasPanX = cx - worldX * canvasZoom;
+                    canvasPanY = cy - worldY * canvasZoom;
+                    applyCanvasTransform();
                 }
                 zoomMenu.classList.add('hidden');
             });
         });
 
-        // Wheel and Input logic for zoomLevelText
         if (zoomLevelText) {
             zoomLevelText.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-
-                const zoomFactor = 0.05;
-                let newZoom = currentZoom;
-                if (e.deltaY > 0) {
-                    newZoom -= zoomFactor;
-                } else {
-                    newZoom += zoomFactor;
-                }
-                newZoom = Math.max(0.1, Math.min(newZoom, 4));
-                applyZoom(newZoom);
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                const cx = canvasSection ? canvasSection.clientWidth / 2 : window.innerWidth / 2;
+                const cy = canvasSection ? canvasSection.clientHeight / 2 : window.innerHeight / 2;
+                const worldX = (cx - canvasPanX) / canvasZoom;
+                const worldY = (cy - canvasPanY) / canvasZoom;
+                canvasZoom = Math.max(0.1, Math.min(4, canvasZoom + delta));
+                canvasPanX = cx - worldX * canvasZoom;
+                canvasPanY = cy - worldY * canvasZoom;
+                applyCanvasTransform();
             }, { passive: false });
 
-            // Allow typing a custom zoom value
             zoomLevelText.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 zoomLevelText.contentEditable = 'true';
@@ -190,31 +227,123 @@ document.addEventListener('DOMContentLoaded', () => {
                 let val = parseFloat(zoomLevelText.innerText.replace('%', ''));
                 if (!isNaN(val)) {
                     val = Math.max(10, Math.min(400, val));
-                    applyZoom(val / 100);
+                    const cx = canvasSection ? canvasSection.clientWidth / 2 : window.innerWidth / 2;
+                    const cy = canvasSection ? canvasSection.clientHeight / 2 : window.innerHeight / 2;
+                    const worldX = (cx - canvasPanX) / canvasZoom;
+                    const worldY = (cy - canvasPanY) / canvasZoom;
+                    canvasZoom = val / 100;
+                    canvasPanX = cx - worldX * canvasZoom;
+                    canvasPanY = cy - worldY * canvasZoom;
+                    applyCanvasTransform();
                 } else {
-                    // Reset to old value visually
-                    applyZoom(currentZoom);
+                    applyCanvasTransform();
                 }
             });
         }
 
         if (canvasSection) {
-            // passive: false is required to preventDefault on wheel
             canvasSection.addEventListener('wheel', (e) => {
+                e.preventDefault();
                 if (e.ctrlKey || e.metaKey) {
+                    const rect = canvasSection.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const worldX = (mouseX - canvasPanX) / canvasZoom;
+                    const worldY = (mouseY - canvasPanY) / canvasZoom;
+                    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+                    canvasZoom = Math.max(0.05, Math.min(4, canvasZoom * factor));
+                    canvasPanX = mouseX - worldX * canvasZoom;
+                    canvasPanY = mouseY - worldY * canvasZoom;
+                } else {
+                    canvasPanX -= e.deltaX;
+                    canvasPanY -= e.deltaY;
+                }
+                applyCanvasTransform();
+            }, { passive: false });
+
+            let isPanning = false;
+            let panStartX = 0;
+            let panStartY = 0;
+            let spaceDown = false;
+
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' && !e.target.matches('input, textarea, [contenteditable]')) {
                     e.preventDefault();
-                    // Fine-tuned zoom factor for smooth scroll
-                    const zoomFactor = 0.05;
-                    let newZoom = currentZoom;
-                    if (e.deltaY < 0) {
-                        newZoom += zoomFactor;
-                    } else {
-                        newZoom -= zoomFactor;
-                    }
-                    newZoom = Math.max(0.1, Math.min(newZoom, 4));
-                    applyZoom(newZoom);
+                    spaceDown = true;
+                    canvasSection.style.cursor = 'grab';
+                }
+            });
+            document.addEventListener('keyup', (e) => {
+                if (e.code === 'Space') {
+                    spaceDown = false;
+                    if (!isPanning) canvasSection.style.cursor = '';
+                }
+            });
+
+            canvasSection.addEventListener('pointerdown', (e) => {
+                if (e.button === 1 || (e.button === 0 && spaceDown)) {
+                    e.preventDefault();
+                    isPanning = true;
+                    panStartX = e.clientX - canvasPanX;
+                    panStartY = e.clientY - canvasPanY;
+                    canvasSection.style.cursor = 'grabbing';
+                    canvasSection.setPointerCapture(e.pointerId);
+                }
+            });
+            canvasSection.addEventListener('pointermove', (e) => {
+                if (!isPanning) return;
+                canvasPanX = e.clientX - panStartX;
+                canvasPanY = e.clientY - panStartY;
+                applyCanvasTransform();
+            });
+            canvasSection.addEventListener('pointerup', () => {
+                if (isPanning) {
+                    isPanning = false;
+                    canvasSection.style.cursor = spaceDown ? 'grab' : '';
+                }
+            });
+
+            let lastTouchDist = null;
+            let lastTouchPanX = 0;
+            let lastTouchPanY = 0;
+
+            canvasSection.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    const dx = e.touches[1].clientX - e.touches[0].clientX;
+                    const dy = e.touches[1].clientY - e.touches[0].clientY;
+                    lastTouchDist = Math.hypot(dx, dy);
+                } else if (e.touches.length === 1) {
+                    lastTouchPanX = e.touches[0].clientX - canvasPanX;
+                    lastTouchPanY = e.touches[0].clientY - canvasPanY;
+                }
+            }, { passive: true });
+            canvasSection.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 2) {
+                    const dx = e.touches[1].clientX - e.touches[0].clientX;
+                    const dy = e.touches[1].clientY - e.touches[0].clientY;
+                    const dist = Math.hypot(dx, dy);
+                    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                    const rect = canvasSection.getBoundingClientRect();
+                    const mx = midX - rect.left;
+                    const my = midY - rect.top;
+                    const worldX = (mx - canvasPanX) / canvasZoom;
+                    const worldY = (my - canvasPanY) / canvasZoom;
+                    canvasZoom = Math.max(0.05, Math.min(4, canvasZoom * (dist / lastTouchDist)));
+                    canvasPanX = mx - worldX * canvasZoom;
+                    canvasPanY = my - worldY * canvasZoom;
+                    lastTouchDist = dist;
+                    applyCanvasTransform();
+                } else if (e.touches.length === 1) {
+                    canvasPanX = e.touches[0].clientX - lastTouchPanX;
+                    canvasPanY = e.touches[0].clientY - lastTouchPanY;
+                    applyCanvasTransform();
                 }
             }, { passive: false });
+            canvasSection.addEventListener('touchend', () => {
+                lastTouchDist = null;
+            });
         }
     }
 
@@ -224,26 +353,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('mode-present');
         exitPresentBtn.classList.remove('hidden');
 
-        // Force mockup state
         artboard.setAttribute('data-state', 'mockup');
         updateLogo('mockup');
-
-        // Reset zoom
-        if (typeof applyZoom === 'function') {
-            applyZoom(1);
-        }
     }
 
     function exitPresentationMode() {
         document.body.classList.remove('mode-present');
         exitPresentBtn.classList.add('hidden');
 
-        // Return to wireframe state
         artboard.setAttribute('data-state', 'wireframe');
         updateLogo('wireframe');
-
-        // Reset scroll position of artboard wrapper
-        window.scrollTo(0, 0);
     }
 
     presentBtn.addEventListener('click', enterPresentationMode);
@@ -475,6 +594,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Layer Link Navigation ---
+    document.querySelectorAll('.artboard-layer-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const artboardId = link.getAttribute('data-artboard');
+            if (!artboardId) return;
+            const wrapperId = 'wrapper-' + artboardId;
+            navigateTo(wrapperId);
+        });
+    });
 
     // --- Tooltip & Interactive Animations ---
     const tooltips = document.querySelectorAll('.tooltip-container');
@@ -737,15 +866,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePropertiesPanel();
     }
 
-    // Artboard coordinates helper (accounts for scale/zoom and bounding rect)
     function getArtboardLocalCoords(e) {
         if (!artboard) return { x: 0, y: 0 };
         const rect = artboard.getBoundingClientRect();
-        // currentZoom is from the zoom logic higher up
-        const scale = window.currentZoom || 1;
         return {
-            x: (e.clientX - rect.left) / scale,
-            y: (e.clientY - rect.top) / scale
+            x: (e.clientX - rect.left) / canvasZoom,
+            y: (e.clientY - rect.top) / canvasZoom
         };
     }
 

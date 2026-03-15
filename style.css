@@ -73,28 +73,27 @@ body.mode-present .workspace {
 body.mode-present .canvas {
     background-color: #000;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
 body.mode-present .canvas-viewport {
-    display: flex;
-    flex-direction: row;
-    grid-template-columns: none;
-    gap: 0;
-    width: 100%;
-    height: 100%;
     transform: none !important;
 }
 
 body.mode-present .artboard-wrapper {
-    flex: 0 0 100vw;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
+    width: 100%;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100%;
     opacity: 0;
     transform: none !important;
+}
+
+body.mode-present .artboard-wrapper.active {
+    opacity: 1;
+    z-index: 10;
 }
 
 body.mode-present .artboard-label {
@@ -580,28 +579,25 @@ body.mode-present .artboard {
 .canvas {
     flex: 1;
     background-color: var(--canvas-bg);
-    overflow-x: hidden;
-    overflow-y: auto;
-    /* scrollable interior */
-    display: block;
-    /* block allows margin:auto on child to work well without flex flex-bugs */
-    padding: 40px;
-    transition: padding 0.4s ease, background-color 0.4s ease;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 0.4s ease;
 }
 
-@media (max-width: 900px) {
-    .canvas {
-        padding: 16px;
-    }
+.canvas-viewport {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    will-change: transform;
 }
 
 .artboard-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    position: absolute;
+    width: 1200px;
+    margin: 0;
     transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    transform-origin: top center;
+    transform-origin: top left;
 }
 
 .artboard-wrapper.active {
