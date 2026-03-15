@@ -164,25 +164,53 @@
                     </div>
                     <!-- Children group -->
                     <div id="layerDesktopChildren">
-                        <div class="layer-item indent">
+                        <div class="layer-item indent artboard-layer-link active" data-artboard="portfolio-artboard">
                             <span class="material-symbols-outlined layer-icon">grid_view</span>
-                            Navbar
+                            Main Portfolio
                         </div>
-                        <div class="layer-item indent">
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-1">
                             <span class="material-symbols-outlined layer-icon">grid_view</span>
-                            Hero Section
+                            Nanakorobi Yaoki
                         </div>
-                        <div class="layer-item indent">
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-2">
                             <span class="material-symbols-outlined layer-icon">grid_view</span>
-                            Selected Projects
+                            UX/UI Lab
                         </div>
-                        <div class="layer-item indent">
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-3">
                             <span class="material-symbols-outlined layer-icon">grid_view</span>
-                            About Me
+                            Interactive Components
                         </div>
-                        <div class="layer-item indent">
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-4">
                             <span class="material-symbols-outlined layer-icon">grid_view</span>
-                            Footer / Contact
+                            Station F Clone
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-5">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Robbie Lens
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-7">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Memory Game
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-8">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Babasaki
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-9">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            StudiFlix
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-10">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Zoo Arcadia
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-11">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            EcoRide
+                        </div>
+                        <div class="layer-item indent artboard-layer-link" data-artboard="project-12">
+                            <span class="material-symbols-outlined layer-icon">grid_view</span>
+                            Ibaraki Discovery
                         </div>
                     </div>
                 </div>
@@ -217,66 +245,329 @@
 
             <!-- CANVAS -->
             <section class="canvas" id="canvas">
-                <div class="artboard-wrapper">
-                    <div class="artboard-label">Desktop - Portefolio</div>
+                <div class="canvas-viewport" id="canvasViewport">
+                    
+                    <div class="artboard-wrapper active" id="wrapper-portfolio-artboard">
+                        <div class="artboard-label">Main Portfolio</div>
+                        <div class="artboard" id="portfolio-artboard" data-state="wireframe">
+                            <!-- Header -->
+                            <header class="portfolio-header">
+                                <div class="logo">[D] DAMORE</div>
+                                <nav class="portfolio-nav">
+                                    <span>Work</span>
+                                    <span>About</span>
+                                    <span>Contact</span>
+                                </nav>
+                            </header>
 
-                    <!-- THE ACTUAL PORTFOLIO ARTBOARD -->
-                    <div class="artboard" id="portfolio-artboard" data-state="wireframe">
+                            <!-- Hero -->
+                            <section class="portfolio-hero">
+                                <div class="hero-content">
+                                    <h1>UX/UI Designer.</h1>
+                                    <h2>Creating digital experiences that matter.</h2>
+                                    <p class="bio">I'm David D'AMORE, a UX/UI designer focused on crafting innovative,
+                                        clean, and impactful interfaces with a user-centric approach.</p>
+                                    <button class="btn-primary" id="viewProjectsBtn">View Projects</button>
+                                </div>
+                                <div class="hero-image-placeholder">
+                                    <span class="material-symbols-outlined img-icon">image</span>
+                                </div>
+                            </section>
 
-                        <!-- Header -->
-                        <header class="portfolio-header">
-                            <div class="logo">[D] DAMORE</div>
-                            <nav class="portfolio-nav">
-                                <span>Work</span>
-                                <span>About</span>
-                                <span>Contact</span>
-                            </nav>
-                        </header>
-
-                        <!-- Hero -->
-                        <section class="portfolio-hero">
-                            <div class="hero-content">
-                                <h1>UX/UI Designer.</h1>
-                                <h2>Creating digital experiences that matter.</h2>
-                                <p class="bio">I'm David D'AMORE, a UX/UI designer focused on crafting innovative,
-                                    clean, and impactful interfaces with a user-centric approach.</p>
-                                <button class="btn-primary">View Projects</button>
-                            </div>
-                            <div class="hero-image-placeholder">
-                                <span class="material-symbols-outlined img-icon">image</span>
-                            </div>
-                        </section>
-
-                        <!-- Projects Grid -->
-                        <section class="portfolio-projects">
-                            <div class="section-title">
-                                <h2>Featured Work</h2>
-                            </div>
-                            <div class="projects-grid">
-                                <!-- Project 1 -->
-                                <article class="project-card">
-                                    <div class="project-image-placeholder">
-                                        <span class="material-symbols-outlined img-icon">image</span>
-                                    </div>
-                                    <div class="project-info">
-                                        <h3>Finance App Redesign</h3>
-                                        <p>UX Research • UI Design • Prototyping</p>
-                                    </div>
-                                </article>
-                                <!-- Project 2 -->
-                                <article class="project-card">
-                                    <div class="project-image-placeholder">
-                                        <span class="material-symbols-outlined img-icon">image</span>
-                                    </div>
-                                    <div class="project-info">
-                                        <h3>E-Commerce Platform</h3>
-                                        <p>Design System • E-commerce • Mobile</p>
-                                    </div>
-                                </article>
-                            </div>
-                        </section>
-
+                            <!-- Projects Grid -->
+                            <section class="portfolio-projects">
+                                <div class="section-title">
+                                    <h2>Featured Work</h2>
+                                </div>
+                                <div class="projects-grid">
+                                    <article class="project-card" data-project="1">
+                                        <div class="project-image-placeholder">
+                                            <span class="material-symbols-outlined img-icon">image</span>
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Nanakorobi Yaoki</h3>
+                                            <p>Branding • E-Commerce • UI Design</p>
+                                        </div>
+                                    </article>
+                                    <article class="project-card" data-project="2">
+                                        <div class="project-image-placeholder">
+                                            <span class="material-symbols-outlined img-icon">image</span>
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>UX/UI Lab</h3>
+                                            <p>Research • Wireframing • Prototyping</p>
+                                        </div>
+                                    </article>
+                                </div>
+                            </section>
+                        </div>
                     </div>
+
+                    <!-- PROJECT ARTBOARDS -->
+                    <div class="artboard-wrapper" id="wrapper-project-1">
+                        <div class="artboard-label">Nanakorobi Yaoki - Branding & E-Commerce</div>
+                        <div class="artboard project-artboard" id="project-1">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-1.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Nanakorobi Yaoki</h3>
+                                    <p class="project-category">Branding • E-Commerce • UI Design</p>
+                                    <div class="project-description">
+                                        <p>Conception complète de l'image de marque pour un concept de restauration japonaise. Création du logo, de la charte graphique et d'une plateforme e-commerce intuitive. Focus sur l'expérience utilisateur et la cohérence visuelle cross-canal.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Client:</strong> Entrepreneurial Project</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2018-2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Figma, WordPress/WooCommerce, Symfony</div>
+                                    </div>
+                                    <a href="https://github.com/davistres" target="_blank" class="project-link">View Site</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-2">
+                        <div class="artboard-label">UX/UI Lab - Research & Prototyping</div>
+                        <div class="artboard project-artboard" id="project-2">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-2.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>UX/UI Lab</h3>
+                                    <p class="project-category">Research • Wireframing • Prototyping</p>
+                                    <div class="project-description">
+                                        <p>Collection de travaux de recherche et de conception. Passage de wireframes basse-fidélité à des prototypes haute-fidélité interactifs. Exploration de parcours utilisateurs optimisés pour diverses industries.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> User Experience</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Figma, Prototyping, User Research</div>
+                                    </div>
+                                    <a href="https://github.com/davistres" target="_blank" class="project-link">View Lab</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-3">
+                        <div class="artboard-label">Interactive Components - Micro-UX</div>
+                        <div class="artboard project-artboard" id="project-3">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-3.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Interactive Components</h3>
+                                    <p class="project-category">Micro-UX • DataViz • Forms</p>
+                                    <div class="project-description">
+                                        <p>Développement d'une série de composants web interactifs mettant l'accent sur l'ergonomie et le feedback utilisateur. Optimisation des formulaires, visualisation de données et gestion d'état fluide.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> Interaction Design</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> HTML5, CSS3, JS Vanilla, Chart.js</div>
+                                    </div>
+                                    <a href="https://github.com/davistres" target="_blank" class="project-link">View Project</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-4">
+                        <div class="artboard-label">Station F Clone - Pixel-Perfect UI</div>
+                        <div class="artboard project-artboard" id="project-4">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-4.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Station F Clone</h3>
+                                    <p class="project-category">Integration • UI Design • Accessibility</p>
+                                    <div class="project-description">
+                                        <p>Exercice de haute précision consistant à reproduire l'interface complexe du campus Station F. Focus sur la structure sémantique et le responsive design sans dépendance externe.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> UI Precision</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> HTML5, CSS3 (Vanilla), Responsive Design</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/stationf_homecopie_nojs/" target="_blank" class="project-link">View Site</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-5">
+                        <div class="artboard-label">Robbie Lens - Minimalist Portfolio</div>
+                        <div class="artboard project-artboard" id="project-5">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-5.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Robbie Lens Portfolio</h3>
+                                    <p class="project-category">UI Design • Typography • Accessibility</p>
+                                    <div class="project-description">
+                                        <p>Conception d'une interface épurée mettant en valeur le travail visuel d'un photographe. Travail approfondi sur la typographie, les espaces négatifs et l'accessibilité (A11y).</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Client:</strong> Robbie Lens (Fictional)</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Flexbox, CSS Grid, SEO, A11y</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/RobbieLens/" target="_blank" class="project-link">View Site</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-7">
+                        <div class="artboard-label">Memory Game - Gamification</div>
+                        <div class="artboard project-artboard" id="project-7">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-7.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Memory Game</h3>
+                                    <p class="project-category">Gamification • UI Interaction • Animation</p>
+                                    <div class="project-description">
+                                        <p>Conception d'un jeu de mémoire avec une interface engageante. Focus sur les micro-animations et la gestion de la frustration utilisateur via différents modes de difficulté.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> User Engagement</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> JavaScript, CSS Animations, Game UI</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/MemoryGame-avec-mode/" target="_blank" class="project-link">Play Game</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-8">
+                        <div class="artboard-label">Babasaki - Craftsmanship Design</div>
+                        <div class="artboard project-artboard" id="project-8">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-8.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Babasaki</h3>
+                                    <p class="project-category">UI Design • Minimalism • Transition Design</p>
+                                    <div class="project-description">
+                                        <p>Refonte visuelle pour un collectif d'artisans. L'enjeu était de traduire l'esthétique minimaliste japonaise en une interface web moderne, utilisant des transitions fluides.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Client:</strong> Babasaki Artisans</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Tailwind CSS, JavaScript, UI/UX Design</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/Babasaki/" target="_blank" class="project-link">View Site</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-9">
+                        <div class="artboard-label">StudiFlix - E-Learning Interface</div>
+                        <div class="artboard project-artboard" id="project-9">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-9.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>StudiFlix</h3>
+                                    <p class="project-category">Information Architecture • UI Design • E-Learning</p>
+                                    <div class="project-description">
+                                        <p>Conception d'une plateforme d'apprentissage inspirée des codes des sites de streaming. Travail sur l'architecture de l'information pour faciliter la découverte de contenus.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> User Engagement</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Bootstrap, JavaScript, Info Architecture</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/StudiFlix/" target="_blank" class="project-link">View Platform</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-10">
+                        <div class="artboard-label">Zoo Arcadia - Management Dashboard</div>
+                        <div class="artboard project-artboard" id="project-10">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-10.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Zoo Arcadia</h3>
+                                    <p class="project-category">SPA Architecture • Admin UI • UX Design</p>
+                                    <div class="project-description">
+                                        <p>Conception d'une application monopage pour un parc zoologique. Création d'un tableau de bord intuitif pour la gestion interne et d'une interface publique immersive.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Client:</strong> Zoo Arcadia</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Docker, Vanilla JS, SPA Design</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/ARCADIA/" target="_blank" class="project-link">View Project</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-11">
+                        <div class="artboard-label">EcoRide - Collaborative Mobility</div>
+                        <div class="artboard project-artboard" id="project-11">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-11.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>EcoRide</h3>
+                                    <p class="project-category">UX Strategy • Service Design • UI Interaction</p>
+                                    <div class="project-description">
+                                        <p>Projet d'envergure incluant la conception du parcours utilisateur complet pour un service de covoiturage. Focus sur la confiance utilisateur et la simplicité de réservation.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> User Trust & Flow</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> Laravel, Vue.js, Tailwind CSS, UX Strategy</div>
+                                    </div>
+                                    <a href="https://covoit-ecoride-14c9c4043bde.herokuapp.com/" target="_blank" class="project-link">View Platform</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artboard-wrapper" id="wrapper-project-12">
+                        <div class="artboard-label">Ibaraki Discovery - Sustainable Travel</div>
+                        <div class="artboard project-artboard" id="project-12">
+                            <div class="project-container">
+                                <div class="project-preview">
+                                    <iframe src="portefolio/portfolio-12.html"></iframe>
+                                </div>
+                                <div class="project-details">
+                                    <h3>Ibaraki Discovery</h3>
+                                    <p class="project-category">React UI • Experience Design • UX Writing</p>
+                                    <div class="project-description">
+                                        <p>Application React favorisant le tourisme de niche. Conception d'un système de filtrage intelligent et de recommandations personnalisées pour une planification sans friction.</p>
+                                    </div>
+                                    <div class="project-meta">
+                                        <div class="meta-item"><strong>Focus:</strong> Sustainable Tourism</div>
+                                        <div class="meta-item"><strong>Year:</strong> 2024</div>
+                                        <div class="meta-item"><strong>Tech:</strong> React, Framer Motion, Tailwind, UX Writing</div>
+                                    </div>
+                                    <a href="https://davistres.github.io/ibaraki-discovery/" target="_blank" class="project-link">View Guide</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
