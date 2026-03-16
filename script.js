@@ -1545,7 +1545,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const prevBtn = slideshow.querySelector('.slideshow-prev');
             const nextBtn = slideshow.querySelector('.slideshow-next');
             if (!slides.length) return;
+
             let current = 0;
+            slides.forEach((slide, i) => { if (slide.classList.contains('active')) current = i; });
+            if (!slides[current].classList.contains('active')) slides[current].classList.add('active');
+            if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
 
             function show(index) {
                 slides[current].classList.remove('active');
@@ -1556,8 +1560,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
             if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
-            slides[0].classList.add('active');
-            if (counter) counter.textContent = `1 / ${slides.length}`;
         });
     }
 
