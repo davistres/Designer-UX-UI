@@ -596,12 +596,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Layer Link Navigation ---
-    document.querySelectorAll('.artboard-layer-link').forEach(link => {
+    const layerLinks = document.querySelectorAll('.artboard-layer-link');
+    layerLinks.forEach(link => {
         link.addEventListener('click', () => {
             const artboardId = link.getAttribute('data-artboard');
             if (!artboardId) return;
+
+            updateSidebarActiveState(artboardId);
             const wrapperId = 'wrapper-' + artboardId;
             navigateTo(wrapperId);
+        });
+    });
+
+    function updateSidebarActiveState(artboardId) {
+        layerLinks.forEach(l => {
+            if (l.getAttribute('data-artboard') === artboardId) {
+                l.classList.add('active');
+            } else {
+                l.classList.remove('active');
+            }
+        });
+    }
+
+    // --- Project Card & Hero Button Navigation ---
+    const viewProjectsBtn = document.getElementById('viewProjectsBtn');
+    if (viewProjectsBtn) {
+        viewProjectsBtn.addEventListener('click', () => {
+            const firstProject = document.querySelector('.artboard-layer-link[data-artboard="project-1"]');
+            if (firstProject) firstProject.click();
+        });
+    }
+
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const projectId = card.getAttribute('data-project');
+            if (projectId) {
+                const artboardId = 'project-' + projectId;
+                updateSidebarActiveState(artboardId);
+                navigateTo('wrapper-' + artboardId);
+            }
         });
     });
 
