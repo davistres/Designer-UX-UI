@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'wrapper-portfolio-artboard': { x: 0,     y: 0    },
         'wrapper-project-1':         { x: 0,  y: -1500 },
         'wrapper-project-2':         { x: -2000,    y: -3000 },
-        'wrapper-project-3':         { x: 3000,   y: -900 },
+        'wrapper-project-3':         { x: 4000,   y: -900 },
         'wrapper-project-4':         { x: -3000,  y: -700  },
         'wrapper-project-5':         { x: 1800,   y: 250  },
         'wrapper-project-7':         { x: -3000,  y: 4000 },
         'wrapper-project-8':         { x: -2000,    y: 800 },
         'wrapper-project-9':         { x: 1600,   y: 2500 },
         'wrapper-project-10':        { x: -800,  y: 3500 },
-        'wrapper-project-11':        { x: 4000,    y: -4000 },
+        'wrapper-project-11':        { x: 3000,    y: -4000 },
         'wrapper-project-12':        { x: -12000,   y: 1650 },
     };
 
@@ -1442,5 +1442,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // --- Slideshows ---
+    function initSlideshows() {
+        document.querySelectorAll('.project-slideshow').forEach(slideshow => {
+            const slides = slideshow.querySelectorAll('.slideshow-slide');
+            const counter = slideshow.querySelector('.slideshow-counter');
+            const prevBtn = slideshow.querySelector('.slideshow-prev');
+            const nextBtn = slideshow.querySelector('.slideshow-next');
+            if (!slides.length) return;
+            let current = 0;
+
+            function show(index) {
+                slides[current].classList.remove('active');
+                current = (index + slides.length) % slides.length;
+                slides[current].classList.add('active');
+                if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+            }
+
+            if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
+            if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
+            slides[0].classList.add('active');
+            if (counter) counter.textContent = `1 / ${slides.length}`;
+        });
+    }
+
+    initSlideshows();
 
 });
