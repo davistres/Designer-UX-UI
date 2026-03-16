@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const header = document.createElement('div');
             header.className = 'slideshow-section-header';
-            header.innerHTML = `<span class="slideshow-section-num">Projet ${String(idx + 1).padStart(2, '0')}</span><span class="slideshow-section-title">${projectTitle}</span>`;
+            header.innerHTML = `<span class="slideshow-section-num">Projet ${String(idx + 1).padStart(2, '0')}</span>`;
 
             const containerClone = artboardEl ? artboardEl.querySelector('.project-container').cloneNode(true) : document.createElement('div');
 

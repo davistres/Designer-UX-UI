@@ -784,7 +784,7 @@ body.mode-present .artboard {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255,255,255,0.15);
+    background: #2564eb63;
     border: none;
     color: #fff;
     font-size: 22px;
@@ -801,7 +801,7 @@ body.mode-present .artboard {
 }
 
 .slideshow-btn:hover {
-    background: rgba(255,255,255,0.35);
+    background: #2564eb;
 }
 
 .slideshow-prev { left: 14px; }
@@ -1529,11 +1529,41 @@ body.mode-present .artboard {
     text-transform: uppercase;
 }
 
-.slideshow-section-title {
-    font-size: 13px;
-    font-family: var(--font-ui);
-    color: #ccc;
-    font-weight: 500;
+.slideshow-section .project-details h3 {
+    color: #f0f0f0;
+}
+
+.slideshow-section .project-description,
+.slideshow-section .project-description p,
+.slideshow-section .project-description ul {
+    color: #b0b0b0;
+}
+
+.slideshow-section .meta-item {
+    color: #999;
+}
+
+.slideshow-section .meta-item strong,
+.slideshow-section .project-info-list strong {
+    color: #e0e0e0;
+}
+
+.slideshow-section .project-info-list {
+    color: #aaa;
+}
+
+.slideshow-section .project-tag {
+    background: #2a2a2a;
+    color: #c0c0c0;
+    border-color: #3a3a3a;
+}
+
+.slideshow-section .project-section-title {
+    color: #777;
+}
+
+.slideshow-section .project-meta {
+    margin-top: 16px;
 }
 
 .slideshow-section .project-container {
