@@ -347,31 +347,94 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Presentation Mode Logic ---
+    // --- Projects Slideshow Mode ---
 
-    function enterPresentationMode() {
-        document.body.classList.add('mode-present');
+    const slideshowOverlay = document.getElementById('projectsSlideshow');
+    const slideshowTrack = document.getElementById('slideshowTrack');
+    const slideshowDotsNav = document.getElementById('slideshowDots');
+
+    const PROJECT_WRAPPER_IDS = [
+        'wrapper-project-1', 'wrapper-project-2', 'wrapper-project-3',
+        'wrapper-project-4', 'wrapper-project-5', 'wrapper-project-7',
+        'wrapper-project-8', 'wrapper-project-9', 'wrapper-project-10',
+        'wrapper-project-11', 'wrapper-project-12'
+    ];
+
+    function buildSlideshowSections() {
+        slideshowTrack.innerHTML = '';
+        slideshowDotsNav.innerHTML = '';
+
+        PROJECT_WRAPPER_IDS.forEach((wrapperId, idx) => {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+
+            const artboardEl = wrapper.querySelector('.project-artboard');
+            const titleEl = wrapper.querySelector('.project-title');
+            const projectTitle = titleEl ? titleEl.textContent.trim() : wrapperId;
+
+            const section = document.createElement('div');
+            section.className = 'slideshow-section';
+            section.dataset.index = idx;
+
+            const header = document.createElement('div');
+            header.className = 'slideshow-section-header';
+            header.innerHTML = `<span class="slideshow-section-num">Projet ${String(idx + 1).padStart(2, '0')}</span><span class="slideshow-section-title">${projectTitle}</span>`;
+
+            const containerClone = artboardEl ? artboardEl.querySelector('.project-container').cloneNode(true) : document.createElement('div');
+
+            section.appendChild(header);
+            section.appendChild(containerClone);
+            slideshowTrack.appendChild(section);
+
+            const dot = document.createElement('button');
+            dot.className = 'slideshow-dot';
+            dot.title = projectTitle;
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            slideshowDotsNav.appendChild(dot);
+        });
+
+        initSlideshows(slideshowTrack);
+        updateActiveDot();
+    }
+
+    function updateActiveDot() {
+        const dots = slideshowDotsNav.querySelectorAll('.slideshow-dot');
+        const sections = slideshowTrack.querySelectorAll('.slideshow-section');
+        const trackScrollTop = slideshowTrack.scrollTop;
+        const trackHeight = slideshowTrack.clientHeight;
+
+        let activeIdx = 0;
+        sections.forEach((section, idx) => {
+            if (section.offsetTop <= trackScrollTop + trackHeight / 2) {
+                activeIdx = idx;
+            }
+        });
+
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIdx));
+    }
+
+    function enterProjectsSlideshow() {
+        buildSlideshowSections();
+        slideshowOverlay.classList.remove('hidden');
         exitPresentBtn.classList.remove('hidden');
-
-        artboard.setAttribute('data-state', 'mockup');
-        updateLogo('mockup');
+        slideshowTrack.scrollTop = 0;
+        slideshowTrack.addEventListener('scroll', updateActiveDot);
     }
 
-    function exitPresentationMode() {
-        document.body.classList.remove('mode-present');
+    function exitProjectsSlideshow() {
+        slideshowOverlay.classList.add('hidden');
         exitPresentBtn.classList.add('hidden');
-
-        artboard.setAttribute('data-state', 'wireframe');
-        updateLogo('wireframe');
+        slideshowTrack.removeEventListener('scroll', updateActiveDot);
     }
 
-    presentBtn.addEventListener('click', enterPresentationMode);
-    exitPresentBtn.addEventListener('click', exitPresentationMode);
+    presentBtn.addEventListener('click', enterProjectsSlideshow);
+    exitPresentBtn.addEventListener('click', exitProjectsSlideshow);
 
-    // Allow ESC key to exit presentation
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && document.body.classList.contains('mode-present')) {
-            exitPresentationMode();
+        if (e.key === 'Escape' && !slideshowOverlay.classList.contains('hidden')) {
+            exitProjectsSlideshow();
         }
     });
 
@@ -621,10 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Project Card & Hero Button Navigation ---
     const viewProjectsBtn = document.getElementById('viewProjectsBtn');
     if (viewProjectsBtn) {
-        viewProjectsBtn.addEventListener('click', () => {
-            const firstProject = document.querySelector('.artboard-layer-link[data-artboard="project-1"]');
-            if (firstProject) firstProject.click();
-        });
+        viewProjectsBtn.addEventListener('click', enterProjectsSlideshow);
     }
 
     document.querySelectorAll('.project-card').forEach(card => {
@@ -1477,8 +1537,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Slideshows ---
-    function initSlideshows() {
-        document.querySelectorAll('.project-slideshow').forEach(slideshow => {
+    function initSlideshows(container) {
+        const root = container || document;
+        root.querySelectorAll('.project-slideshow').forEach(slideshow => {
             const slides = slideshow.querySelectorAll('.slideshow-slide');
             const counter = slideshow.querySelector('.slideshow-counter');
             const prevBtn = slideshow.querySelector('.slideshow-prev');

@@ -1473,3 +1473,135 @@ body.mode-present .artboard {
 /* =========================================
    ASSETS MAP (FRANCE)
    ========================================= */
+
+/* =========================================
+   PROJECTS SLIDESHOW OVERLAY
+   ========================================= */
+.projects-slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: #111;
+    display: flex;
+    overflow: hidden;
+}
+
+.projects-slideshow.hidden {
+    display: none;
+}
+
+.slideshow-track {
+    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+}
+
+.slideshow-track::-webkit-scrollbar {
+    display: none;
+}
+
+.slideshow-section {
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.slideshow-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    flex-shrink: 0;
+}
+
+.slideshow-section-num {
+    font-size: 11px;
+    font-family: var(--font-ui);
+    color: #666;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.slideshow-section-title {
+    font-size: 13px;
+    font-family: var(--font-ui);
+    color: #ccc;
+    font-weight: 500;
+}
+
+.slideshow-section .project-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    height: auto;
+}
+
+.slideshow-section .project-preview {
+    flex: 0 0 55%;
+    height: 100%;
+    overflow: hidden;
+    border-right: 1px solid #2a2a2a;
+}
+
+.slideshow-section .project-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.slideshow-section .project-preview.multi-iframe-container {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.slideshow-section .project-preview.multi-iframe-container iframe {
+    height: 350px;
+    flex-shrink: 0;
+}
+
+.slideshow-section .project-details {
+    flex: 0 0 45%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px 28px;
+    background: #161616;
+}
+
+.slideshow-dots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: #1a1a1a;
+    border-left: 1px solid #2a2a2a;
+}
+
+.slideshow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #444;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.slideshow-dot.active {
+    background: var(--ui-accent, #0d99ff);
+    transform: scale(1.3);
+}
+
+.slideshow-dot:hover {
+    background: #888;
+}
