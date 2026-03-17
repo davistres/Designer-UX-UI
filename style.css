@@ -431,6 +431,32 @@ body.mode-present .artboard {
     }
 }
 
+.mobile-only-tab {
+    display: none;
+}
+
+@media (max-width: 901px) {
+    .mobile-only-tab {
+        display: block;
+    }
+
+    .sidebar-profil {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .sidebar-profil .profile-card-img {
+        width: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--ui-accent);
+    }
+}
+
 @media (max-width: 900px) {
     .right-sidebar {
         position: absolute;

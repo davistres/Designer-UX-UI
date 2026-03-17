@@ -476,23 +476,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Left Sidebar Tabs Logic ---
     const tabFile = document.getElementById('tabFile');
     const tabAssets = document.getElementById('tabAssets');
+    const tabProfil = document.getElementById('tabProfil');
     const contentFile = document.getElementById('contentFile');
     const contentAssets = document.getElementById('contentAssets');
+    const contentProfil = document.getElementById('contentProfil');
 
-    if (tabFile && tabAssets && contentFile && contentAssets) {
-        tabFile.addEventListener('click', () => {
-            tabFile.classList.add('active');
-            tabAssets.classList.remove('active');
-            contentFile.classList.remove('hidden');
-            contentAssets.classList.add('hidden');
-        });
-        tabAssets.addEventListener('click', () => {
-            tabAssets.classList.add('active');
-            tabFile.classList.remove('active');
-            contentAssets.classList.remove('hidden');
-            contentFile.classList.add('hidden');
+    const leftTabs = [
+        { tab: tabFile, content: contentFile },
+        { tab: tabAssets, content: contentAssets },
+        { tab: tabProfil, content: contentProfil },
+    ];
+
+    function activateLeftTab(activeTab) {
+        leftTabs.forEach(({ tab, content }) => {
+            if (!tab || !content) return;
+            if (tab === activeTab) {
+                tab.classList.add('active');
+                content.classList.remove('hidden');
+            } else {
+                tab.classList.remove('active');
+                content.classList.add('hidden');
+            }
         });
     }
+
+    leftTabs.forEach(({ tab }) => {
+        if (tab) tab.addEventListener('click', () => activateLeftTab(tab));
+    });
 
     // --- Right Sidebar Tabs Logic ---
     const tabDesignRight = document.getElementById('tabDesignRight');
