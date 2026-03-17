@@ -1337,6 +1337,26 @@ body.mode-present .artboard {
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
+.contact-inline-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .contact-inline-mobile {
+        display: block;
+        border-top: 1px solid var(--ui-border);
+        padding-top: 16px;
+    }
+
+    #contactFormMobile {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 8px;
+    }
+}
+
 /* =========================================
    TEXT TOOL & SELECTION
    ========================================= */

@@ -241,6 +241,27 @@
                         style="font-size: 12px; margin: 0; color: var(--ui-text-muted); line-height: 1.5; text-align: justify;">
                         Sinon, le full
                         remote, c'est pas mal aussi... Mais je m'adapterai à vos besoins.</p>
+
+                    <div class="contact-inline-mobile">
+                        <h3 style="font-size: 14px; margin: 0 0 8px; color: var(--ui-text); font-weight: 600;">Envoyez moi un message</h3>
+                        <form id="contactFormMobile" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" value="e40f8bf5-12da-44c9-9b2f-b11323f91638">
+                            <input type="hidden" name="subject" value="Nouveau message depuis le Portfolio !">
+                            <input type="hidden" name="from_name" value="Portfolio Contact">
+                            <div class="form-group">
+                                <label for="senderEmailMobile">Votre email</label>
+                                <input type="email" id="senderEmailMobile" name="email" placeholder="hello@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="senderMessageMobile">Message</label>
+                                <textarea id="senderMessageMobile" name="message" rows="4" placeholder="Comment puis-je vous aider ?" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" id="submitContactBtnMobile">
+                                <span class="material-symbols-outlined">send</span> Envoyer
+                            </button>
+                            <div id="formStatusMsgMobile" class="form-status-msg hidden"></div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Profil Tab Content (mobile/tablette uniquement) -->

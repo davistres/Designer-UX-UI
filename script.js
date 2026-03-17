@@ -1488,62 +1488,104 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Handle AJAX form submission for a seamless UX
+        async function handleContactSubmit(form, statusMsg, submitBtn, modalToClose) {
+            const formData = new FormData(form);
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">autorenew</span> Envoi...';
+
+            if (!document.getElementById('spinnerStyle')) {
+                const style = document.createElement('style');
+                style.id = 'spinnerStyle';
+                style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+                document.head.appendChild(style);
+            }
+
+            statusMsg.classList.add('hidden');
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    statusMsg.textContent = "Message envoyé avec succès !";
+                    statusMsg.className = "form-status-msg success";
+                    form.reset();
+
+                    setTimeout(() => {
+                        if (modalToClose) modalToClose.classList.add('hidden');
+                        statusMsg.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    throw new Error("Erreur serveur Web3Forms");
+                }
+            } catch (error) {
+                console.error("Erreur d'envoi:", error);
+                statusMsg.innerHTML = "Oups ! Un problème est survenu lors de l'envoi.";
+                statusMsg.className = "form-status-msg error";
+            } finally {
+                statusMsg.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Envoyer';
+            }
+        }
+
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-
-                const submitContactBtn = document.getElementById('submitContactBtn');
-                const formStatusMsg = document.getElementById('formStatusMsg');
-
-                // Form data preparation
-                const formData = new FormData(contactForm);
-
-                // UI Loading state
-                submitContactBtn.disabled = true;
-                submitContactBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">autorenew</span> Envoi...';
-
-                if (!document.getElementById('spinnerStyle')) {
-                    const style = document.createElement('style');
-                    style.id = 'spinnerStyle';
-                    style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
-                    document.head.appendChild(style);
-                }
-
-                formStatusMsg.classList.add('hidden');
-
-                try {
-                    // Using Web3Forms AJAX endpoint
-                    const response = await fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        formStatusMsg.textContent = "Message envoyé avec succès !";
-                        formStatusMsg.className = "form-status-msg success";
-                        contactForm.reset();
-
-                        setTimeout(() => {
-                            contactModal.classList.add('hidden');
-                            formStatusMsg.classList.add('hidden');
-                        }, 3000);
-                    } else {
-                        throw new Error("Erreur serveur Web3Forms");
-                    }
-                } catch (error) {
-                    console.error("Erreur d'envoi:", error);
-                    formStatusMsg.innerHTML = "Oups ! Un problème est survenu lors de l'envoi.";
-                    formStatusMsg.className = "form-status-msg error";
-                } finally {
-                    formStatusMsg.classList.remove('hidden');
-                    submitContactBtn.disabled = false;
-                    submitContactBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Envoyer';
-                }
+                await handleContactSubmit(
+                    contactForm,
+                    document.getElementById('formStatusMsg'),
+                    document.getElementById('submitContactBtn'),
+                    contactModal
+                );
             });
         }
+    }
+
+    const contactFormMobile = document.getElementById('contactFormMobile');
+    if (contactFormMobile) {
+        contactFormMobile.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitContactBtnMobile');
+            const statusMsg = document.getElementById('formStatusMsgMobile');
+            const formData = new FormData(contactFormMobile);
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">autorenew</span> Envoi...';
+            if (!document.getElementById('spinnerStyle')) {
+                const style = document.createElement('style');
+                style.id = 'spinnerStyle';
+                style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+                document.head.appendChild(style);
+            }
+            statusMsg.classList.add('hidden');
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    statusMsg.textContent = "Message envoyé avec succès !";
+                    statusMsg.className = "form-status-msg success";
+                    contactFormMobile.reset();
+                    setTimeout(() => { statusMsg.classList.add('hidden'); }, 3000);
+                } else {
+                    throw new Error("Erreur serveur Web3Forms");
+                }
+            } catch (error) {
+                console.error("Erreur d'envoi:", error);
+                statusMsg.innerHTML = "Oups ! Un problème est survenu lors de l'envoi.";
+                statusMsg.className = "form-status-msg error";
+            } finally {
+                statusMsg.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Envoyer';
+            }
+        });
     }
 
     // --- Slideshows ---
