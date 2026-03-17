@@ -154,7 +154,9 @@ body.mode-present .artboard {
     .zoom-level {
         display: none;
     }
+}
 
+@media (max-width: 471px) {
     .topbar-left .icon-btn {
         display: none;
     }
