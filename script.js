@@ -396,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         initSlideshows(slideshowTrack);
-        updateActiveDot();
     }
 
     function updateActiveDot() {
@@ -420,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         slideshowOverlay.classList.remove('hidden');
         exitPresentBtn.classList.remove('hidden');
         slideshowTrack.scrollTop = 0;
+        updateActiveDot();
         slideshowTrack.addEventListener('scroll', updateActiveDot);
     }
 
