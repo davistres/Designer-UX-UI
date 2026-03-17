@@ -156,9 +156,58 @@ body.mode-present .artboard {
     }
 }
 
+.mobile-more-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.mobile-tools-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#mobileMoreBtn {
+    display: none;
+}
+
 @media (max-width: 471px) {
     .topbar-left .icon-btn {
         display: none;
+    }
+
+    #cursorBtn {
+        display: flex;
+    }
+
+    #mobileMoreBtn {
+        display: flex;
+    }
+
+    .mobile-tools-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        flex-direction: column;
+        gap: 4px;
+        background-color: var(--ui-bg);
+        border: 1px solid var(--ui-border);
+        border-radius: 6px;
+        padding: 6px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        z-index: 300;
+    }
+
+    .mobile-tools-dropdown.open {
+        display: flex;
+    }
+
+    .mobile-tools-dropdown .icon-btn {
+        display: flex;
+        width: 100%;
+        justify-content: center;
     }
 }
 

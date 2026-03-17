@@ -38,15 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const FRAME_POSITIONS = {
         'wrapper-portfolio-artboard': { x: 0,     y: 0    },
-        'wrapper-project-1':         { x: 0,  y: -1500 },
+        'wrapper-project-1':         { x: 500,  y: -2200 },
         'wrapper-project-2':         { x: -2000,    y: -3000 },
-        'wrapper-project-3':         { x: 4000,   y: -900 },
+        'wrapper-project-3':         { x: 4000,   y: -1400 },
         'wrapper-project-4':         { x: -3000,  y: -700  },
-        'wrapper-project-5':         { x: 1800,   y: 250  },
+        'wrapper-project-5':         { x: 3500,   y: 1700  },
         'wrapper-project-7':         { x: -3000,  y: 4000 },
-        'wrapper-project-8':         { x: -2000,    y: 800 },
-        'wrapper-project-9':         { x: 1600,   y: 2500 },
-        'wrapper-project-10':        { x: -800,  y: 3500 },
+        'wrapper-project-8':         { x: -3600,    y: 1400 },
+        'wrapper-project-9':         { x: 2200,   y: 3500 },
+        'wrapper-project-10':        { x: -200,  y: 4300 },
         'wrapper-project-11':        { x: 3000,    y: -4000 },
         'wrapper-project-12':        { x: -12000,   y: 1650 },
     };
@@ -833,6 +833,26 @@ document.addEventListener('DOMContentLoaded', () => {
         cursorBtn.addEventListener('click', () => setTool('cursor'));
         tagBtn.addEventListener('click', () => setTool('tag'));
         if (textBtn) textBtn.addEventListener('click', () => setTool('text'));
+    }
+
+    const mobileMoreBtn = document.getElementById('mobileMoreBtn');
+    const mobileToolsDropdown = document.getElementById('mobileToolsDropdown');
+
+    if (mobileMoreBtn && mobileToolsDropdown) {
+        const mobileMoreIcon = mobileMoreBtn.querySelector('.material-symbols-outlined');
+
+        mobileMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = mobileToolsDropdown.classList.toggle('open');
+            mobileMoreIcon.textContent = isOpen ? 'expand_less' : 'expand_more';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMoreBtn.contains(e.target) && !mobileToolsDropdown.contains(e.target)) {
+                mobileToolsDropdown.classList.remove('open');
+                mobileMoreIcon.textContent = 'expand_more';
+            }
+        });
     }
 
     const uxHashtags = [
