@@ -722,6 +722,19 @@ body.mode-present .artboard {
     color: #111;
 }
 
+.project-info-link a {
+    color: var(--ui-accent);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid var(--ui-accent);
+}
+
+@media (min-width: 1023px) {
+.project-info-link {
+        display: none !important;
+    }
+}
+
 .project-link {
     display: inline-block;
     background: #111;
@@ -738,6 +751,12 @@ body.mode-present .artboard {
 .project-link:hover {
     background: var(--ui-accent);
     transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+.project-link {
+        display: none;
+    }
 }
 
 /* Slideshow */
@@ -1421,6 +1440,14 @@ body.mode-present .artboard {
     align-items: center;
     gap: 8px;
     text-align: center;
+}
+
+@media (max-width: 1024px) {
+    .share-card {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 .share-card h4 {
