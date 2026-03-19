@@ -134,6 +134,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        const fileNameBtn = document.getElementById('fileNameBtn');
+        const fileNamePopup = document.getElementById('fileNamePopup');
+        if (fileNameBtn && fileNamePopup) {
+            fileNameBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileNamePopup.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!fileNameBtn.contains(e.target)) {
+                    fileNamePopup.classList.add('hidden');
+                }
+            });
+        }
+
         const shareBtn = document.getElementById('shareBtn');
         const shareCard = document.getElementById('shareCard');
         if (shareBtn && shareCard) {
