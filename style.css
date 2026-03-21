@@ -806,7 +806,7 @@ body.mode-present .artboard {
     border-bottom: 2px solid var(--ui-accent);
 }
 
-@media (min-width: 1023px) {
+@media (min-width: 1025px) {
 .project-info-link {
         display: none !important;
     }
@@ -1744,7 +1744,7 @@ body.mode-present .artboard {
 }
 
 .slideshow-section .project-details {
-    flex: 0 0 45%;
+    flex: 0 0 42%;
     height: 100%;
     overflow-y: auto;
     padding: 24px 28px;
