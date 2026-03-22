@@ -730,7 +730,8 @@ body.mode-present .artboard {
 
 .project-container {
     display: flex;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     width: 100%;
 }
 
@@ -740,6 +741,13 @@ body.mode-present .artboard {
     border-right: 1px solid #EEE;
     position: relative;
     overflow: hidden;
+}
+
+.project-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-y: auto;
 }
 
 .project-preview iframe {
@@ -754,7 +762,6 @@ body.mode-present .artboard {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    background: #FFF;
     overflow-y: auto;
 }
 
@@ -762,7 +769,7 @@ body.mode-present .artboard {
     font-size: 32px;
     font-weight: 800;
     margin: 0;
-    color: #111;
+    color: #f0f0f0;
     letter-spacing: -0.5px;
 }
 
@@ -999,8 +1006,94 @@ body.mode-present .artboard {
     }
     .project-details {
         flex: 1;
-        padding: 32px;
+        padding: 12px;
     }
+}
+
+/* =========================================
+   PANEL TOGGLE BAR
+   ========================================= */
+.panel-toggle-bar {
+    display: none; /* Invisible sur desktop */
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: #f0f2f5;
+    border-bottom: 1px solid #dde1e8;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+    .panel-toggle-bar {
+        display: flex; /* Visible sur tablettes */
+    }
+}
+
+.panel-toggle-bar-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    margin-right: 4px;
+    font-family: var(--font-ui);
+    white-space: nowrap;
+}
+
+.panel-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border: 1.5px solid #d0d5df;
+    border-radius: 6px;
+    background: #fff;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    white-space: nowrap;
+}
+
+.panel-toggle-btn .material-symbols-outlined {
+    font-size: 15px;
+}
+
+.panel-toggle-btn:hover {
+    border-color: var(--ui-accent);
+    color: var(--ui-accent);
+}
+
+.panel-toggle-btn.active {
+    background: var(--ui-accent);
+    border-color: var(--ui-accent);
+    color: #fff;
+}
+
+.project-artboard {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-container {
+    flex: 1;
+    min-height: 0;
+}
+
+.project-container.panel-preview-active .project-details {
+    display: none !important;
+}
+
+.project-container.panel-details-active .project-preview {
+    display: none !important;
+}
+
+.project-container.panel-preview-active .project-preview,
+.project-container.panel-details-active .project-details {
+    flex: 1;
+    min-height: 0;
 }
 
 /* Layer list links */
@@ -1651,10 +1744,12 @@ body.mode-present .artboard {
 
 .slideshow-section {
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
 .slideshow-section-header {
@@ -1674,10 +1769,6 @@ body.mode-present .artboard {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-}
-
-.slideshow-section .project-details h3 {
-    color: #f0f0f0;
 }
 
 .slideshow-section .project-description,
@@ -1718,6 +1809,7 @@ body.mode-present .artboard {
     min-height: 0;
     display: flex;
     height: auto;
+    overflow: hidden; /* Empêche le contenu de pousser le conteneur */
 }
 
 .slideshow-section .project-preview {
@@ -1725,30 +1817,28 @@ body.mode-present .artboard {
     height: 100%;
     overflow: hidden;
     border-right: 1px solid #2a2a2a;
+    display: flex;
+    flex-direction: column;
+
 }
 
-.slideshow-section .project-preview iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-.slideshow-section .project-preview.multi-iframe-container {
-    overflow-y: auto;
-    height: 100%;
-}
-
-.slideshow-section .project-preview.multi-iframe-container iframe {
-    height: 350px;
-    flex-shrink: 0;
-}
-
-.slideshow-section .project-details {
-    flex: 0 0 42%;
-    height: 100%;
-    overflow-y: auto;
-    padding: 24px 28px;
-    background: #161616;
+@media (max-width: 1024px) {
+    .slideshow-section .project-container {
+        flex-direction: column;
+    }
+    
+    .slideshow-section .project-preview {
+        flex: 1; /* Prend tout l'espace disponible */
+        border-right: none;
+        border-bottom: 1px solid #2a2a2a;
+        width: 100%;
+    }
+    
+    .slideshow-section .project-details {
+        flex: 1;
+        overflow-y: auto;
+        background: #161616;
+    }
 }
 
 .slideshow-dots {

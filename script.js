@@ -399,6 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             section.appendChild(header);
             section.appendChild(containerClone);
+
+            // Ajouter la barre de bascule au clone pour le mode présentation
+            if (artboardEl) {
+                addPanelToggleLogic(section, containerClone);
+            }
+
             slideshowTrack.appendChild(section);
 
             const dot = document.createElement('button');
@@ -430,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function enterProjectsSlideshow() {
+        updateRealVH(); // Recalculer la hauteur réelle au moment de l'ouverture
         buildSlideshowSections();
         slideshowOverlay.classList.remove('hidden');
         exitPresentBtn.classList.remove('hidden');
@@ -1650,6 +1657,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    initSlideshows();
+    // --- Barre de bascule Aperçu / Détails (Logic) ---
+    function addPanelToggleLogic(artboard, container) {
+        if (!artboard || !container) return;
+        const bar = document.createElement('div');
+        bar.className = 'panel-toggle-bar';
+        bar.innerHTML = `
+            <span class="panel-toggle-bar-label">Vue :</span>
+            <button class="panel-toggle-btn" data-panel="preview">
+                <span class="material-symbols-outlined">monitor</span>Aperçu
+            </button>
+            <button class="panel-toggle-btn" data-panel="details">
+                <span class="material-symbols-outlined">description</span>Détails
+            </button>
+        `;
+        // Insérer AVANT le conteneur pour être en haut
+        artboard.insertBefore(bar, container);
 
+        const btns = bar.querySelectorAll('.panel-toggle-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const panel = btn.dataset.panel;
+                const activeClass = `panel-${panel}-active`;
+                const isActive = container.classList.contains(activeClass);
+                container.classList.remove('panel-preview-active', 'panel-details-active');
+                btns.forEach(b => b.classList.remove('active'));
+                if (!isActive) {
+                    container.classList.add(activeClass);
+                    btn.classList.add('active');
+                }
+            });
+        });
+    }
+
+    // --- Gestion de la hauteur réelle sur Mobile (VH Bug) ---
+    function updateRealVH() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', updateRealVH);
+    updateRealVH();
+
+    initSlideshows();
+    // --- Initialiser la barre de bascule sur les artboards d'origine ---
+    document.querySelectorAll('.project-artboard').forEach(artboard => {
+        const container = artboard.querySelector('.project-container');
+        addPanelToggleLogic(artboard, container);
+    });
+    
 });
