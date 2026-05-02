@@ -32,7 +32,8 @@ body {
     font-size: 12px;
 }
 
-p, ul {
+p,
+ul {
     text-align: justify;
 }
 
@@ -56,7 +57,7 @@ p, ul {
 /* Mode Present Active - Full Screen Slideshow as requested */
 body.mode-present .topbar,
 body.mode-present .sidebar {
-   transform: translateY(-100%);
+    transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -769,7 +770,7 @@ body.mode-present .artboard {
     font-size: 32px;
     font-weight: 800;
     margin: 0;
-    color: #f0f0f0;
+    color: #000;
     letter-spacing: -0.5px;
 }
 
@@ -814,7 +815,7 @@ body.mode-present .artboard {
 }
 
 @media (min-width: 1025px) {
-.project-info-link {
+    .project-info-link {
         display: none !important;
     }
 }
@@ -838,7 +839,7 @@ body.mode-present .artboard {
 }
 
 @media (max-width: 1024px) {
-.project-link {
+    .project-link {
         display: none;
     }
 }
@@ -907,15 +908,20 @@ body.mode-present .artboard {
     background: #2564eb;
 }
 
-.slideshow-prev { left: 14px; }
-.slideshow-next { right: 14px; }
+.slideshow-prev {
+    left: 14px;
+}
+
+.slideshow-next {
+    right: 14px;
+}
 
 .slideshow-counter {
     position: absolute;
     bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
     font-size: 12px;
     padding: 4px 12px;
@@ -999,11 +1005,13 @@ body.mode-present .artboard {
     .project-container {
         flex-direction: column;
     }
+
     .project-preview {
         flex: 1;
         border-right: none;
         border-bottom: 1px solid #EEE;
     }
+
     .project-details {
         flex: 1;
         padding: 12px;
@@ -1014,7 +1022,8 @@ body.mode-present .artboard {
    PANEL TOGGLE BAR
    ========================================= */
 .panel-toggle-bar {
-    display: none; /* Invisible sur desktop */
+    display: none;
+    /* Invisible sur desktop */
     align-items: center;
     gap: 6px;
     padding: 7px 14px;
@@ -1025,7 +1034,8 @@ body.mode-present .artboard {
 
 @media (max-width: 1024px) {
     .panel-toggle-bar {
-        display: flex; /* Visible sur tablettes */
+        display: flex;
+        /* Visible sur tablettes */
     }
 }
 
@@ -1233,8 +1243,15 @@ body.mode-present .artboard {
 }
 
 @keyframes tooltipFadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
-    to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 /* =========================================
@@ -1809,7 +1826,8 @@ body.mode-present .artboard {
     min-height: 0;
     display: flex;
     height: auto;
-    overflow: hidden; /* Empêche le contenu de pousser le conteneur */
+    overflow: hidden;
+    /* Empêche le contenu de pousser le conteneur */
 }
 
 .slideshow-section .project-preview {
@@ -1826,14 +1844,15 @@ body.mode-present .artboard {
     .slideshow-section .project-container {
         flex-direction: column;
     }
-    
+
     .slideshow-section .project-preview {
-        flex: 1; /* Prend tout l'espace disponible */
+        flex: 1;
+        /* Prend tout l'espace disponible */
         border-right: none;
         border-bottom: 1px solid #2a2a2a;
         width: 100%;
     }
-    
+
     .slideshow-section .project-details {
         flex: 1;
         overflow-y: auto;
